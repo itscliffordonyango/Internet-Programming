@@ -1,0 +1,33 @@
+h1{
+    color: black;
+    font-size: 34px;
+    text-align: center;
+    font-weight:bold;
+}
+h2{
+    color: blue;
+    font-size: 18px;
+}
+.list1 {
+    padding-left: 5px;
+    font-size: 16px;
+    
+
+dt {
+    font-weight: bold;
+    margin-top: 10px;
+    padding-left: 40px;
+
+}
+}.list2 {
+    font-size: 16px;
+    padding-left: 5px;
+    color: red;
+    
+ol{
+    margin-top: 10px;
+    line-height: 1.5;
+    padding-left: 40px;
+}
+
+}
