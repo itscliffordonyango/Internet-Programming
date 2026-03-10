@@ -1,5 +1,5 @@
 <!-- 
-a)	A JavaScript  program is required to calculate wages for employees of Kamonjo Ltd. Using the following formulae.						
+a)	A JavaScript  program is required to calculate wages for employees of Kamonjo Ltd. Using the following formulae						
 a.	Basic salary = No of Hours * hourly rate
 b.	Lunch Allowance = 200
 c.	Gross Salary = Basic Pay + Lunch Allowance
@@ -12,28 +12,356 @@ Hourly rate and lunch allowance are constant values. The number of hours worked 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamonjo program</title>
+    <title>Kamonjo Ltd Salary Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .calculator-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        
+        .rate-info {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+        
+        .rate-info p {
+            margin: 5px 0;
+            color: #444;
+            font-size: 0.95rem;
+        }
+        
+        .rate-info strong {
+            color: #667eea;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        input[type="number"].error {
+            border-color: #e74c3c;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-calculate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-clear {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-clear:hover {
+            background: #d0d0d0;
+        }
+        
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .results h2 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-item.gross {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .result-item.tax {
+            color: #e74c3c;
+        }
+        
+        .result-item.net {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #27ae60;
+            background: #f0f9f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .result-item .label {
+            color: #666;
+        }
+        
+        .result-item .value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <frame>
-        <h1>Kamonjo Ltd Salary Calculator</h1>
-        <p>Enter the number of hours worked:</p>
-        <input type="number" id="hoursWorked" placeholder="e.g. 40">
-        <button onclick="calculateSalary()">Calculate Salary</button>
-        <p id="result"></p>
+    <div class="calculator-container">
+        <h1>Kamonjo Ltd</h1>
+        <p class="subtitle">Salary Calculator</p>
+        
+        <div class="rate-info">
+            <p><strong>Hourly Rate:</strong> KSh 15.00</p>
+            <p><strong>Lunch Allowance:</strong> KSh 200.00</p>
+            <p><strong>Tax Rate:</strong> 30%</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="hoursWorked">Enter Hours Worked:</label>
+            <input type="number" id="hoursWorked" placeholder="e.g. 40" min="0" step="0.5">
+            <p class="error-message" id="errorMessage">Please enter a valid number of hours (positive number)</p>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-calculate" onclick="calculateSalary()">Calculate Salary</button>
+            <button class="btn-clear" onclick="clearForm()">Clear</button>
+        </div>
+        
+        <div class="results" id="results">
+            <h2>Salary Breakdown</h2>
+            <div class="result-item">
+                <span class="label">Basic Salary</span>
+                <span class="value" id="basicSalary">KSh 0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="label">Lunch Allowance</span>
+                <span class="value" id="lunchAllowance">KSh 200.00</span>
+            </div>
+            <div class="result-item gross">
+                <span class="label">Gross Salary</span>
+                <span class="value" id="grossSalary">KSh 0.00</span>
+            </div>
+            <div class="result-item tax">
+                <span class="label">Income Tax (30%)</span>
+                <span class="value" id="tax">KSh 0.00</span>
+            </div>
+            <div class="result-item net">
+                <span class="label">Net Pay</span>
+                <span class="value" id="netPay">KSh 0.00</span>
+            </div>
+        </div>
+    </div>
 
-        <script>
-            function calculateSalary() {
-                const hoursWorked = document.getElementById('hoursWorked').value;
-                const hourlyRate = 15; // Assuming an hourly rate of 15
-                const lunchAllowance = 200; // Constant lunch allowance
-                const basicSalary = hoursWorked * hourlyRate; // Basic salary calculation
-                const grossSalary = basicSalary + lunchAllowance; // Gross salary calculation
-                const tax = grossSalary * 0.30; // Income tax calculation (30% of gross)
-                const netPay = grossSalary - tax; // Net pay calculation
-                document.getElementById('result').innerText = `Net Pay: ${netPay.toFixed(2)}`;
+    <script>
+        // Constants
+        const HOURLY_RATE = 15;
+        const LUNCH_ALLOWANCE = 200;
+        const TAX_RATE = 0.30;
+
+        // Currency formatter
+        function formatCurrency(amount) {
+            return 'KSh ' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Validate input
+        function validateInput() {
+            const hoursInput = document.getElementById('hoursWorked');
+            const errorMessage = document.getElementById('errorMessage');
+            const hours = hoursInput.value.trim();
+            
+            // Check if empty
+            if (hours === '') {
+                showError(hoursInput, errorMessage, 'Please enter the number of hours worked');
+                return null;
             }
-        </script>
-        </frame>
+            
+            // Convert to number
+            const hoursNum = parseFloat(hours);
+            
+            // Check if valid number
+            if (isNaN(hoursNum)) {
+                showError(hoursInput, errorMessage, 'Please enter a valid number');
+                return null;
+            }
+            
+            // Check if negative
+            if (hoursNum < 0) {
+                showError(hoursInput, errorMessage, 'Hours cannot be negative');
+                return null;
+            }
+            
+            // Clear error state
+            clearError(hoursInput, errorMessage);
+            return hoursNum;
+        }
+
+        // Show error message
+        function showError(input, errorElement, message) {
+            input.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        // Clear error state
+        function clearError(input, errorElement) {
+            input.classList.remove('error');
+            errorElement.classList.remove('show');
+        }
+
+        // Calculate salary
+        function calculateSalary() {
+            const hoursWorked = validateInput();
+            
+            if (hoursWorked === null) {
+                document.getElementById('results').classList.remove('show');
+                return;
+            }
+            
+            // Calculate all salary components
+            const basicSalary = hoursWorked * HOURLY_RATE;
+            const grossSalary = basicSalary + LUNCH_ALLOWANCE;
+            const tax = grossSalary * TAX_RATE;
+            const netPay = grossSalary - tax;
+            
+            // Display results
+            document.getElementById('basicSalary').textContent = formatCurrency(basicSalary);
+            document.getElementById('lunchAllowance').textContent = formatCurrency(LUNCH_ALLOWANCE);
+            document.getElementById('grossSalary').textContent = formatCurrency(grossSalary);
+            document.getElementById('tax').textContent = formatCurrency(tax);
+            document.getElementById('netPay').textContent = formatCurrency(netPay);
+            
+            // Show results section
+            document.getElementById('results').classList.add('show');
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('hoursWorked').value = '';
+            document.getElementById('hoursWorked').classList.remove('error');
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('hoursWorked').focus();
+        }
+
+        // Add enter key support
+        document.getElementById('hoursWorked').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateSalary();
+            }
+        });
+    </script>
 </body>
 </html>
+
