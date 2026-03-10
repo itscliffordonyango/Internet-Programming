@@ -1,0 +1,27 @@
+<!-- Write a program to compute your age -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calc</title>
+</head>
+<body>
+    <frame>
+        <h1>Age Calculator</h1>
+        <p>Enter your birth year:</p>
+        <input type="number" id="birthYear" placeholder="e.g. 1990">
+        <button onclick="calculateAge()">Calculate Age</button>
+        <p id="result"></p>
+
+        <script>
+            function calculateAge() {
+                const birthYear = document.getElementById('birthYear').value;
+                const currentYear = new Date().getFullYear();
+                const age = currentYear - birthYear;
+                document.getElementById('result').innerText = `Your age is: ${age}`;
+            }
+        </script>
+        </frame>
+</body>
+</html>

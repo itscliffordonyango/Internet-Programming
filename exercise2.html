@@ -1,0 +1,31 @@
+<!-- A newly constructed computer lab is 15metres long and 10 meters wide. The lab is to be fitted with floor tiles. Write a program that prompts a user to enter the length and width of the lab. The program then computes the number of the tiles required. One tile has an Ares of 0.36M2.                                                                                                                 (6 marks) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Computer</title>
+</head>
+<body>
+    <frame>
+        <h1>Lab Computer</h1>
+        <p>Enter the length of the lab (in meters):</p>
+        <input type="number" id="labLength" placeholder="e.g. 15">
+        <p>Enter the width of the lab (in meters):</p>
+        <input type="number" id="labWidth" placeholder="e.g. 10">
+        <button onclick="calculateTiles()">Calculate Tiles</button>
+        <p id="result"></p>
+
+        <script>
+            function calculateTiles() {
+                const labLength = document.getElementById('labLength').value;
+                const labWidth = document.getElementById('labWidth').value;
+                const tileArea = 0.36; // Area of one tile in square meters
+                const labArea = labLength * labWidth; // Area of the lab
+                const numberOfTiles = Math.ceil(labArea / tileArea); // Calculate number of tiles needed
+                document.getElementById('result').innerText = `Number of tiles required: ${numberOfTiles}`;
+            }
+        </script>
+        </frame>
+</body>
+</html>

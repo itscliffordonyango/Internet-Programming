@@ -1,0 +1,39 @@
+<!-- 
+a)	A JavaScript  program is required to calculate wages for employees of Kamonjo Ltd. Using the following formulae.						
+a.	Basic salary = No of Hours * hourly rate
+b.	Lunch Allowance = 200
+c.	Gross Salary = Basic Pay + Lunch Allowance
+d.	Income Tax charged on gross pay is 30% of the gross
+e.	Net pay = Gross pay – Tax
+Hourly rate and lunch allowance are constant values. The number of hours worked should be read from the keyboard. Write a program process salary for an employee.                                                                                                      (7 marks)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamonjo program</title>
+</head>
+<body>
+    <frame>
+        <h1>Kamonjo Ltd Salary Calculator</h1>
+        <p>Enter the number of hours worked:</p>
+        <input type="number" id="hoursWorked" placeholder="e.g. 40">
+        <button onclick="calculateSalary()">Calculate Salary</button>
+        <p id="result"></p>
+
+        <script>
+            function calculateSalary() {
+                const hoursWorked = document.getElementById('hoursWorked').value;
+                const hourlyRate = 15; // Assuming an hourly rate of 15
+                const lunchAllowance = 200; // Constant lunch allowance
+                const basicSalary = hoursWorked * hourlyRate; // Basic salary calculation
+                const grossSalary = basicSalary + lunchAllowance; // Gross salary calculation
+                const tax = grossSalary * 0.30; // Income tax calculation (30% of gross)
+                const netPay = grossSalary - tax; // Net pay calculation
+                document.getElementById('result').innerText = `Net Pay: ${netPay.toFixed(2)}`;
+            }
+        </script>
+        </frame>
+</body>
+</html>

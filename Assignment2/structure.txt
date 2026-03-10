@@ -1,0 +1,19 @@
+tech-website/
+│
+├── index.html
+├── about.html
+├── services.html
+├── gallery.html
+├── contact.html
+│
+├── css/
+│   └── styles.css
+│
+├── images/
+│   ├── ai.jpg
+│   ├── robotics.jpg
+│   ├── coding.jpg
+│   └── tech.jpg
+│
+├── audio/
+│   └── tech-podcast.mp3
