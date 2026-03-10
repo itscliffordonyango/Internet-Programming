@@ -4,28 +4,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Computer</title>
+    <title>Lab Tile Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .calculator-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        
+        .tile-info {
+            background: #f0fff4;
+            border-left: 4px solid #11998e;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+        
+        .tile-info p {
+            margin: 5px 0;
+            color: #444;
+            font-size: 0.95rem;
+        }
+        
+        .tile-info strong {
+            color: #11998e;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+        
+        input[type="number"].error {
+            border-color: #e74c3c;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-calculate {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+        }
+        
+        .btn-clear {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-clear:hover {
+            background: #d0d0d0;
+        }
+        
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .results h2 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #11998e;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-item.tiles {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #11998e;
+            background: #f0fff4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .result-item .label {
+            color: #666;
+        }
+        
+        .result-item .value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <frame>
-        <h1>Lab Computer</h1>
-        <p>Enter the length of the lab (in meters):</p>
-        <input type="number" id="labLength" placeholder="e.g. 15">
-        <p>Enter the width of the lab (in meters):</p>
-        <input type="number" id="labWidth" placeholder="e.g. 10">
-        <button onclick="calculateTiles()">Calculate Tiles</button>
-        <p id="result"></p>
+    <div class="calculator-container">
+        <h1>Lab Tile Calculator</h1>
+        <p class="subtitle">Floor Tile Estimation Tool</p>
+        
+        <div class="tile-info">
+            <p><strong>Tile Area:</strong> 0.36 m² per tile</p>
+            <p><strong>Calculation:</strong> Uses ceiling to ensure full coverage</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="labLength">Lab Length (meters):</label>
+            <input type="number" id="labLength" placeholder="e.g. 15" min="0" step="0.1">
+            <p class="error-message" id="lengthError">Please enter a valid length (positive number)</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="labWidth">Lab Width (meters):</label>
+            <input type="number" id="labWidth" placeholder="e.g. 10" min="0" step="0.1">
+            <p class="error-message" id="widthError">Please enter a valid width (positive number)</p>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-calculate" onclick="calculateTiles()">Calculate Tiles</button>
+            <button class="btn-clear" onclick="clearForm()">Clear</button>
+        </div>
+        
+        <div class="results" id="results">
+            <h2>Calculation Details</h2>
+            <div class="result-item">
+                <span class="label">Lab Length</span>
+                <span class="value" id="displayLength">0 m</span>
+            </div>
+            <div class="result-item">
+                <span class="label">Lab Width</span>
+                <span class="value" id="displayWidth">0 m</span>
+            </div>
+            <div class="result-item">
+                <span class="label">Lab Area</span>
+                <span class="value" id="labArea">0 m²</span>
+            </div>
+            <div class="result-item">
+                <span class="label">Tile Area</span>
+                <span class="value" id="tileArea">0.36 m²</span>
+            </div>
+            <div class="result-item">
+                <span class="label">Exact Tiles Needed</span>
+                <span class="value" id="exactTiles">0</span>
+            </div>
+            <div class="result-item tiles">
+                <span class="label">Total Tiles Required</span>
+                <span class="value" id="totalTiles">0</span>
+            </div>
+        </div>
+    </div>
 
-        <script>
-            function calculateTiles() {
-                const labLength = document.getElementById('labLength').value;
-                const labWidth = document.getElementById('labWidth').value;
-                const tileArea = 0.36; // Area of one tile in square meters
-                const labArea = labLength * labWidth; // Area of the lab
-                const numberOfTiles = Math.ceil(labArea / tileArea); // Calculate number of tiles needed
-                document.getElementById('result').innerText = `Number of tiles required: ${numberOfTiles}`;
+    <script>
+        // Constants
+        const TILE_AREA = 0.36; // Area of one tile in square meters
+
+        // Validate input
+        function validateInput(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(errorId);
+            const value = input.value.trim();
+            
+            // Check if empty
+            if (value === '') {
+                showError(input, errorElement, 'This field is required');
+                return null;
             }
-        </script>
-        </frame>
+            
+            // Convert to number
+            const numValue = parseFloat(value);
+            
+            // Check if valid number
+            if (isNaN(numValue)) {
+                showError(input, errorElement, 'Please enter a valid number');
+                return null;
+            }
+            
+            // Check if negative or zero
+            if (numValue <= 0) {
+                showError(input, errorElement, 'Value must be greater than zero');
+                return null;
+            }
+            
+            // Clear error state
+            clearError(input, errorElement);
+            return numValue;
+        }
+
+        // Show error message
+        function showError(input, errorElement, message) {
+            input.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        // Clear error state
+        function clearError(input, errorElement) {
+            input.classList.remove('error');
+            errorElement.classList.remove('show');
+        }
+
+        // Calculate tiles
+        function calculateTiles() {
+            const labLength = validateInput('labLength', 'lengthError');
+            const labWidth = validateInput('labWidth', 'widthError');
+            
+            if (labLength === null || labWidth === null) {
+                document.getElementById('results').classList.remove('show');
+                return;
+            }
+            
+            // Calculate areas
+            const labArea = labLength * labWidth;
+            const exactTiles = labArea / TILE_AREA;
+            const totalTiles = Math.ceil(exactTiles); // Round up to ensure full coverage
+            
+            // Display results
+            document.getElementById('displayLength').textContent = labLength.toFixed(2) + ' m';
+            document.getElementById('displayWidth').textContent = labWidth.toFixed(2) + ' m';
+            document.getElementById('labArea').textContent = labArea.toFixed(2) + ' m²';
+            document.getElementById('tileArea').textContent = TILE_AREA + ' m²';
+            document.getElementById('exactTiles').textContent = exactTiles.toFixed(2);
+            document.getElementById('totalTiles').textContent = totalTiles + ' tiles';
+            
+            // Show results section
+            document.getElementById('results').classList.add('show');
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('labLength').value = '';
+            document.getElementById('labWidth').value = '';
+            document.getElementById('labLength').classList.remove('error');
+            document.getElementById('labWidth').classList.remove('error');
+            document.getElementById('lengthError').classList.remove('show');
+            document.getElementById('widthError').classList.remove('show');
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('labLength').focus();
+        }
+
+        // Add enter key support for both inputs
+        document.getElementById('labLength').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('labWidth').focus();
+            }
+        });
+        
+        document.getElementById('labWidth').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateTiles();
+            }
+        });
+    </script>
 </body>
 </html>
+
