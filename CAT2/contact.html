@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Valley Health</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Contact Our Community</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section class="contact-container">
+
+    <!-- Contact Info Card -->
+    <div class="contact-info">
+        <h2>Visit Us</h2>
+        <p>We are always ready to hear from residents and visitors.</p>
+
+        <ul>
+            <li><strong>📍 Location:</strong> Valley Health Community Center</li>
+            <li><strong>📞 Phone:</strong> +254 700 000000</li>
+            <li><strong>✉ Email:</strong> info@valleyhealth.org</li>
+            <li><strong>⏰ Hours:</strong> Mon – Fri | 8AM – 5PM</li>
+        </ul>
+
+        <iframe 
+            src="https://www.google.com/maps?q=community+center&output=embed"
+            height="220">
+        </iframe>
+    </div>
+
+    <!-- Contact Form Card -->
+    <div class="contact-form">
+        <h2>Send a Message</h2>
+
+        <form id="contactForm">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="name">
+                <small class="error"></small>
+            </div>
+
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="email">
+                <small class="error"></small>
+            </div>
+
+            <div class="input-group">
+                <label>Subject</label>
+                <input type="text" id="subject">
+            </div>
+
+            <div class="input-group">
+                <label>Message</label>
+                <textarea id="message" rows="5"></textarea>
+                <small class="error"></small>
+            </div>
+
+            <button type="submit">Send Message</button>
+            <p id="successMsg"></p>
+        </form>
+    </div>
+
+</section>
+
+<footer>
+    <p>© 2026 Valley Health | Connecting People, Building Futures</p>
+</footer>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let valid = true;
+
+    function showError(id, message){
+        const input = document.getElementById(id);
+        const error = input.nextElementSibling;
+        error.textContent = message;
+        input.classList.add("error-border");
+        valid = false;
+    }
+
+    function clearError(id){
+        const input = document.getElementById(id);
+        const error = input.nextElementSibling;
+        error.textContent = "";
+        input.classList.remove("error-border");
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    clearError("name");
+    clearError("email");
+    clearError("message");
+
+    if(name === "") showError("name","Name is required");
+    if(email === "" || !email.includes("@")) showError("email","Valid email required");
+    if(message === "") showError("message","Message cannot be empty");
+
+    if(valid){
+        document.getElementById("successMsg").textContent =
+            "✅ Thank you! Your message has been received.";
+        this.reset();
+    }
+});
+</script>
+
+</body>
+</html>
