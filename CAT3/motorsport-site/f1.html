@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula 1 - Motorsport Hub</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Preloader, Header same as index -->
+    <div class="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <header class="header">
+        <!-- Nav same as index -->
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-fire"></i> Motorsport Hub
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="f1.html" class="nav-link active">Formula 1</a></li>
+                <li><a href="motogp.html" class="nav-link">MotoGP</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- F1 Hero -->
+        <section class="hero">
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1499786608178-b5d3e569e067?w=1920&h=1080&fit=crop');"></div>
+            <div class="hero-content">
+                <h1 class="hero-title animate-slide-up">Formula 1</h1>
+                <p class="hero-subtitle animate-slide-up delay-1">The pinnacle of motorsport since 1950</p>
+            </div>
+        </section>
+
+        <!-- F1 History -->
+        <section class="history section-padding">
+            <div class="container">
+                <h2 class="section-title">History of Formula 1</h2>
+                <div class="content-grid">
+                    <div class="content-text animate-slide-up">
+                        <p>Formula 1, the highest class of open-wheeled auto racing defined by the Fédération Internationale de l'Automobile (FIA), began in 1950. The first world championship was won by Italian Giuseppe Farina at Silverstone.</p>
+                        <p>Today, F1 features 10 teams and 20 drivers competing in 24 Grands Prix worldwide, pushing the limits of speed, technology, and human performance.</p>
+                    </div>
+                    <div class="stats-grid animate-slide-up delay-1">
+                        <div class="stat-item">
+                            <h3 class="stat-counter" data-target="75">75</h3>
+                            <p>Championship Seasons</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-counter" data-target="1100">1100+</h3>
+                            <p>Grands Prix</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-counter" data-target="372">372</h3>
+                            <p>Top Speed (km/h)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Teams & Drivers -->
+        <section class="teams section-padding">
+            <div class="container">
+                <h2 class="section-title">2024 Teams & Drivers</h2>
+                <div class="teams-grid">
+                    <div class="team-card animate-fade-in">
+                        <div class="team-logo">RB</div>
+                        <h3>Red Bull Racing</h3>
+                        <p>Max Verstappen (1st), Sergio Pérez</p>
+                        <p class="team-stats">Constructor Points: 608</p>
+                    </div>
+                    <div class="team-card animate-fade-in delay-1">
+                        <div class="team-logo">F</div>
+                        <h3>Ferrari</h3>
+                        <p>Charles Leclerc, Carlos Sainz</p>
+                        <p class="team-stats">Constructor Points: 462</p>
+                    </div>
+                    <div class="team-card animate-fade-in delay-2">
+                        <div class="team-logo">M</div>
+                        <h3>McLaren</h3>
+                        <p>Lando Norris, Oscar Piastri</p>
+                        <p class="team-stats">Constructor Points: 499</p>
+                    </div>
+                    <div class="team-card animate-fade-in delay-3">
+                        <div class="team-logo">MB</div>
+                        <h3>Mercedes</h3>
+                        <p>Lewis Hamilton, George Russell</p>
+                        <p class="team-stats">Constructor Points: 345</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Race Highlights -->
+        <section class="highlights section-padding">
+            <div class="container">
+                <h2 class="section-title">Race Highlights</h2>
+                <div class="video-grid">
+                    <div class="video-wrapper animate-slide-up">
+                        <video controls preload="metadata" class="video-player">
+                            <source src="assets/videos/charles.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-wrapper animate-slide-up delay-1">
+                        <video controls preload="metadata" class="video-player">
+                            <source src="assets/videos/lewis.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Motorsport Hub. All rights reserved. | Formula 1 data sourced from official FIA results.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

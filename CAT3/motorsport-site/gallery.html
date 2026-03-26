@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Motorsport Hub</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="preloader"><div class="spinner"></div></div>
+
+    <header class="header">
+        <nav class="nav">
+            <div class="logo"><i class="fas fa-fire"></i> Motorsport Hub</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="f1.html" class="nav-link">Formula 1</a></li>
+                <li><a href="motogp.html" class="nav-link">MotoGP</a></li>
+                <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="theme-toggle"><i class="fas fa-moon"></i></div>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-bg" style="background-image: linear-gradient(45deg, #000, #ff0000), url('https://images.unsplash.com/photo-1564519588242-b569190a185b?w=1920');"></div>
+            <div class="hero-content">
+                <h1 class="hero-title animate-slide-up">Media Gallery</h1>
+                <p class="hero-subtitle animate-slide-up delay-1">Best moments from F1 and MotoGP</p>
+            </div>
+        </section>
+
+        <section class="gallery section-padding">
+            <div class="container">
+                <h2 class="section-title">📸 Photo Gallery</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1544703685-8e0d4321e34f?w=800" data-type="image">
+<img 
+  src="assets/images/monaco.jpeg"
+  data-src="assets/images/monaco.jpeg"
+  alt="Monaco Victory"
+  class="lazy">
+                        <div class="gallery-overlay">
+                            <h3>Monaco 2024</h3>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-src="assets/images/f1.jpeg" data-type="image">
+<img 
+  src="assets/images/f1.jpeg"
+  data-src="assets/images/f1.jpeg"
+  alt="F1 Start"
+  class="lazy">
+                        <div class="gallery-overlay">
+                            <h3>Grid Start</h3>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1570549717069-33bed2ebafec?w=800" data-type="image">
+<img 
+  src="assets/images/mtgp.jpeg"
+  data-src="assets/images/mtgp.jpeg"
+  alt="MotoGP Corner"
+  class="lazy">
+                        <div class="gallery-overlay">
+                            <h3>MotoGP Lean</h3>
+                        </div>
+                    </div>
+                    <!-- Add more gallery items -->
+                    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1564519588242-b569190a185b?w=800" data-type="image">
+<img src="assets/images/Motor-gp.jpeg" alt="Pit Stop" class="lazy" data-src="assets/images/Motor-gp.jpeg">
+                        <div class="gallery-overlay">
+                            <h3>Pit Action</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="videos section-padding">
+            <div class="container">
+                <h2 class="section-title">🎥 Video Highlights</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-src="https://www.youtube.com/embed/dYPbGC4cySY?autoplay=1" data-type="video">
+                        <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                            <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                                    src="https://www.youtube.com/embed/lL_d84cN1UY" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen loading="lazy">
+                            </iframe>
+                        </div>
+                        <div class="gallery-overlay">
+                            <h3>Monaco GP 2024</h3>
+                        </div>
+                    </div>
+                    <!-- More videos -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Audio section -->
+        <section class="audio section-padding">
+            <div class="container">
+                <h2 class="section-title">🔊 Engine Sounds</h2>
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <audio controls>
+                            <source src="https://freesound.org/data/previews/171/171671_2435678-lq.mp3" type="audio/mpeg">
+                            F1 Engine Rev
+                        </audio>
+                        <h3>F1 V6 Turbo</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content"></div>
+    </div>
+
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
+    <footer class="footer"><div class="container"><p>&copy; 2024 Motorsport Hub. High-res media gallery.</p></div></footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

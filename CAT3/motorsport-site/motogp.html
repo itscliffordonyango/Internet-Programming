@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoGP - Motorsport Hub</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Same header/preloader as other pages -->
+    <div class="preloader"><div class="spinner"></div></div>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo"><i class="fas fa-fire"></i> Motorsport Hub</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="f1.html" class="nav-link">Formula 1</a></li>
+                <li><a href="motogp.html" class="nav-link active">MotoGP</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="theme-toggle"><i class="fas fa-moon"></i></div>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1570549717069-33bed2ebafec?w=1920&h=1080&fit=crop');"></div>
+            <div class="hero-content">
+                <h1 class="hero-title animate-slide-up">MotoGP</h1>
+                <p class="hero-subtitle animate-slide-up delay-1">Premier motorcycle road racing world championship</p>
+            </div>
+        </section>
+
+        <section class="overview section-padding">
+            <div class="container">
+                <h2 class="section-title">MotoGP Overview</h2>
+                <div class="content-grid">
+                    <div class="content-text animate-slide-up">
+                        <p>MotoGP is the highest class of motorcycle road racing events held on sealed road circuits. Teams compete in 1000cc bikes producing over 250 horsepower.</p>
+                        <p>The 2024 season features 21 rounds across 5 continents with Ducati dominating the manufacturers championship.</p>
+                    </div>
+                    <div class="stats-grid animate-slide-up delay-1">
+                        <div class="stat-item">
+                            <h3 class="stat-counter" data-target="21">21</h3>
+                            <p>Races in 2024</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-counter" data-target="362">362</h3>
+                            <p>Top Speed (km/h)</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-counter" data-target="19">19</h3>
+                            <p>Riders per Race</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Riders & Teams -->
+        <section class="teams section-padding">
+            <div class="container">
+                <h2 class="section-title">2024 Top Riders</h2>
+                <div class="teams-grid">
+                    <div class="team-card animate-fade-in">
+                        <div class="team-logo">D</div>
+                        <h3>Ducati Lenovo</h3>
+                        <p>🏆 Francesco Bagnaia (1st)<br> Jorge Martin (2nd)</p>
+                        <p class="team-stats">478 Points</p>
+                    </div>
+                    <div class="team-card animate-fade-in delay-1">
+                        <div class="team-logo">A</div>
+                        <h3>Aprilia</h3>
+                        <p>Maverick Viñales (3rd)<br>Miguel Oliveira</p>
+                        <p class="team-stats">270 Points</p>
+                    </div>
+                    <div class="team-card animate-fade-in delay-2">
+                        <div class="team-logo">K</div>
+                        <h3>KTM Factory</h3>
+                        <p>Brad Binder<br>Pedro Acosta</p>
+                        <p class="team-stats">232 Points</p>
+                    </div>
+                    <div class="team-card animate-fade-in delay-3">
+                        <div class="team-logo">Y</div>
+                        <h3>Yamaha</h3>
+                        <p>Fabio Quartararo<br>Alex Rins</p>
+                        <p class="team-stats">117 Points</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bike Categories -->
+        <section class="categories section-padding">
+            <div class="container">
+                <h2 class="section-title">Bike Specifications</h2>
+                <div class="overview-grid">
+                    <div class="overview-card animate-slide-up">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Proto Bikes</h3>
+                        <p>Factory teams with full electronics, 1000cc, ~260hp</p>
+                    </div>
+                    <div class="overview-card animate-slide-up delay-1">
+                        <i class="fas fa-weight-hanging"></i>
+                        <h3>Minimum Weight</h3>
+                        <p>157kg including rider</p>
+                    </div>
+                    <div class="overview-card animate-slide-up delay-2">
+                        <i class="fas fa-tint"></i>
+                        <h3>Fuel</h3>
+                        <p>22L unleaded racing fuel</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Highlights -->
+        <section class="highlights section-padding">
+            <div class="container">
+                <h2 class="section-title">Epic Moments</h2>
+                <div class="video-grid">
+                    <div class="video-wrapper animate-slide-up">
+                        <iframe src="https://www.youtube.com/embed/ci-cuioZ-5w" 
+                                title="Qatar GP 2024 Sprint" 
+                                frameborder="0" 
+                                allowfullscreen loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Motorsport Hub. MotoGP data from official championship.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+<!-- Additional CSS for this page will be in styles.css -->

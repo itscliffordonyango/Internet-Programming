@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorsport Hub - F1 & MotoGP</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-fire"></i> Motorsport Hub
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="f1.html" class="nav-link">Formula 1</a></li>
+                <li><a href="motogp.html" class="nav-link">MotoGP</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <video autoplay muted loop playsinline class="hero-video">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-cold-racing-car-3999-large.mp4" type="video/mp4">
+            </video>
+            <div class="hero-content">
+                <h1 class="hero-title animate-slide-up">Welcome to Motorsport Hub</h1>
+                <p class="hero-subtitle animate-slide-up delay-1">The ultimate destination for F1 and MotoGP enthusiasts</p>
+                <div class="hero-buttons animate-slide-up delay-2">
+                    <a href="f1.html" class="btn btn-primary">Explore F1</a>
+                    <a href="motogp.html" class="btn btn-secondary">Discover MotoGP</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Overview Section -->
+        <section class="overview section-padding">
+            <div class="container">
+                <h2 class="section-title">Motorsport Overview</h2>
+                <div class="overview-grid">
+                    <div class="overview-card animate-fade-in">
+                        <i class="fas fa-trophy"></i>
+                        <h3>F1 Glory</h3>
+                        <p>Experience the pinnacle of motorsport with speeds over 370km/h and cutting-edge technology.</p>
+                    </div>
+                    <div class="overview-card animate-fade-in delay-1">
+                        <i class="fas fa-motorcycle"></i>
+                        <h3>MotoGP Thrills</h3>
+                        <p>Two wheels, maximum adrenaline - the world's fastest motorcycle racing championship.</p>
+                    </div>
+                    <div class="overview-card animate-fade-in delay-2">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Live Updates</h3>
+                        <p>Latest news, race results, and driver standings always up to date.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured News -->
+        <section class="news section-padding">
+            <div class="container">
+                <h2 class="section-title">Featured Highlights</h2>
+                <div class="news-slider">
+                    <div class="news-card animate-slide-left">
+                        <img src="assets/images/max.jpeg" alt="Verstappen win" loading="lazy">
+                        <div class="news-content">
+                            <h3>Verstappen Dominates Monza 2024</h3>
+                            <p>Max Verstappen secures another victory...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                    <!-- More news cards -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Motorsport Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELOCITY | Motorsport Intelligence Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --f1-red: #e10600;
+            --motogp-blue: #0055ff;
+            --dark-bg: #0a0a0f;
+            --card-bg: #111118;
+            --accent-gold: #ffd700;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --grid-line: rgba(255,255,255,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--f1-red), var(--motogp-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1.5s ease-in-out infinite;
+            letter-spacing: 0.2em;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--f1-red), var(--motogp-blue));
+            animation: load 2s ease-out forwards;
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--grid-line);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 5%;
+            background: rgba(10, 10, 15, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: '◆';
+            background: linear-gradient(135deg, var(--f1-red), var(--motogp-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--f1-red), var(--motogp-blue));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(225,6,0,0.1) 0%, transparent 50%),
+                linear-gradient(225deg, rgba(0,85,255,0.1) 0%, transparent 50%),
+                url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=2070&auto=format&fit=crop') center/cover;
+            filter: brightness(0.3) contrast(1.2);
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 2rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero h1 span {
+            display: block;
+            background: linear-gradient(135deg, #fff 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(90deg, var(--f1-red), var(--motogp-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--f1-red), #ff4444);
+            color: white;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(225,6,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .hero-stats {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4rem;
+            z-index: 2;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: linear-gradient(to bottom, var(--f1-red), var(--motogp-blue));
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .view-all {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .view-all:hover {
+            color: var(--text-primary);
+        }
+
+        .view-all::after {
+            content: '→';
+            transition: transform 0.3s;
+        }
+
+        .view-all:hover::after {
+            transform: translateX(5px);
+        }
+
+        /* Standings Section */
+        .standings {
+            background: var(--card-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .standings::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(225,6,0,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0,85,255,0.05) 0%, transparent 50%);
+        }
+
+        .standings-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .standings-card {
+            background: rgba(17, 17, 24, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .standings-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .standings-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .standings-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .f1-icon { color: var(--f1-red); }
+        .motogp-icon { color: var(--motogp-blue); }
+
+        .standings-list {
+            padding: 1rem;
+        }
+
+        .driver-row {
+            display: grid;
+            grid-template-columns: 40px 50px 1fr 80px 60px;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .driver-row:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .driver-row:last-child {
+            border-bottom: none;
+        }
+
+        .position {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .position.top3 {
+            color: var(--accent-gold);
+        }
+
+        .driver-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .driver-row:hover .driver-img {
+            border-color: var(--accent-gold);
+        }
+
+        .driver-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .driver-info span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .team-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .points {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: right;
+            color: var(--text-primary);
+        }
+
+        /* News Section */
+        .news {
+            background: var(--dark-bg);
+        }
+
+        .news-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .news-card:hover::before {
+            opacity: 1;
+        }
+
+        .news-image {
+            width: 100%;
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, var(--card-bg) 100%);
+        }
+
+        .news-category {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0,0,0,0.8);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .news-category.f1 { color: var(--f1-red); }
+        .news-category.motogp { color: var(--motogp-blue); }
+
+        .news-content {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .news-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .news-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            transition: color 0.3s;
+        }
+
+        .news-card:hover .news-title {
+            color: var(--accent-gold);
+        }
+
+        .news-excerpt {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: linear-gradient(180deg, var(--card-bg) 0%, var(--dark-bg) 100%);
+            position: relative;
+        }
+
+        .video-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .main-video {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                url('https://images.unsplash.com/photo-1541447270888-83e8494f9c08?q=80&w=2070&auto=format&fit=crop') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+
+        .main-video:hover .video-placeholder {
+            transform: scale(1.05);
+        }
+
+        .play-button {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .play-button::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--accent-gold);
+            animation: pulseRing 2s infinite;
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .play-button:hover {
+            background: rgba(225,6,0,0.8);
+            border-color: var(--f1-red);
+            transform: scale(1.1);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 25px solid white;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 5px;
+        }
+
+        .video-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+
+        .video-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .video-thumb {
+            background: var(--card-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-thumb:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .thumb-img {
+            width: 100%;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .thumb-duration {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0,0,0,0.8);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .thumb-title {
+            padding: 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Schedule Section */
+        .schedule {
+            background: var(--dark-bg);
+            position: relative;
+        }
+
+        .schedule::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="0.5"/></svg>');
+            background-size: 200px 200px;
+        }
+
+        .schedule-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .race-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+        }
+
+        .race-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .race-tab.active {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+            border-color: var(--accent-gold);
+        }
+
+        .race-tab:hover:not(.active) {
+            border-color: rgba(255,255,255,0.3);
+            color: var(--text-primary);
+        }
+
+        .race-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .race-item {
+            display: grid;
+            grid-template-columns: 100px 1fr 200px 150px;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(17, 17, 24, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .race-item:hover {
+            background: rgba(17, 17, 24, 0.9);
+            border-color: rgba(255,255,255,0.1);
+            transform: translateX(10px);
+        }
+
+        .race-round {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-secondary);
+        }
+
+        .race-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .race-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .race-date {
+            text-align: center;
+        }
+
+        .race-date .day {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .race-date .month {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .race-status {
+            text-align: right;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-upcoming {
+            background: rgba(0,85,255,0.2);
+            color: var(--motogp-blue);
+        }
+
+        .status-live {
+            background: rgba(225,6,0,0.2);
+            color: var(--f1-red);
+            animation: pulse 2s infinite;
+        }
+
+        .status-completed {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Audio Player */
+        .audio-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(17, 17, 24, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .audio-widget.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .audio-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--f1-red), var(--motogp-blue));
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-info {
+            font-size: 0.9rem;
+        }
+
+        .audio-info strong {
+            display: block;
+            font-weight: 600;
+        }
+
+        .audio-info span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .audio-visualizer {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 20px;
+        }
+
+        .audio-bar {
+            width: 3px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+            animation: audioWave 1s ease-in-out infinite;
+        }
+
+        .audio-bar:nth-child(2) { animation-delay: 0.1s; height: 60%; }
+        .audio-bar:nth-child(3) { animation-delay: 0.2s; height: 40%; }
+        .audio-bar:nth-child(4) { animation-delay: 0.3s; height: 80%; }
+
+        @keyframes audioWave {
+            0%, 100% { height: 20%; }
+            50% { height: 100%; }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--f1-red);
+            border-color: var(--f1-red);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-links h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .standings-grid {
+                grid-template-columns: 1fr;
+            }
+            .news-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .race-item {
+                grid-template-columns: 60px 1fr;
+                gap: 1rem;
+            }
+            .race-date, .race-status {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hero-stats {
+                gap: 2rem;
+            }
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        /* Mobile Menu Button */
+        .menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-btn span {
+            width: 25px;
+            height: 2px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: flex;
+            }
+        }
+
+        /* Parallax Elements */
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(225,6,0,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0,85,255,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-text">VELOCITY</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">VELOCITY</a>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#standings">Standings</a></li>
+                <li><a href="#schedule">Schedule</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#media">Media</a></li>
+            </ul>
+            <div class="menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="hero-badge">2025 Season Live</div>
+            <h1>
+                <span>The Ultimate</span>
+                <span class="highlight">Motorsport</span>
+                <span>Experience</span>
+            </h1>
+            <p class="hero-subtitle">Real-time coverage of Formula 1 and MotoGP championships. Live standings, race schedules, and exclusive content.</p>
+            <div class="hero-cta">
+                <a href="#standings" class="btn btn-primary">View Standings</a>
+                <a href="#schedule" class="btn btn-secondary">Race Calendar</a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-value">24</span>
+                <span class="stat-label">F1 Races</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">22</span>
+                <span class="stat-label">MotoGP Rounds</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">20</span>
+                <span class="stat-label">Drivers</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">11</span>
+                <span class="stat-label">Teams</span>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Standings Section -->
+    <section class="standings" id="standings">
+        <div class="parallax-bg"></div>
+        <div class="section-header reveal">
+            <div>
+                <h2 class="section-title">Championship Standings</h2>
+                <p class="section-subtitle">2025 Season Live Rankings</p>
+            </div>
+            <a href="#" class="view-all">Full Standings</a>
+        </div>
+        <div class="standings-grid">
+            <!-- F1 Standings -->
+            <div class="standings-card reveal">
+                <div class="standings-header">
+                    <h3 class="standings-title">
+                        <span class="f1-icon">▬</span>
+                        Formula 1
+                    </h3>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Drivers</span>
+                </div>
+                <div class="standings-list" id="f1-standings">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- MotoGP Standings -->
+            <div class="standings-card reveal">
+                <div class="standings-header">
+                    <h3 class="standings-title">
+                        <span class="motogp-icon">▬</span>
+                        MotoGP
+                    </h3>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Riders</span>
+                </div>
+                <div class="standings-list" id="motogp-standings">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news" id="news">
+        <div class="section-header reveal">
+            <div>
+                <h2 class="section-title">Latest News</h2>
+                <p class="section-subtitle">Breaking stories from the paddock</p>
+            </div>
+            <a href="#" class="view-all">All News</a>
+        </div>
+        <div class="news-grid">
+            <article class="news-card reveal">
+                <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=2070&auto=format&fit=crop');">
+                    <span class="news-category f1">Formula 1</span>
+                </div>
+                <div class="news-content">
+                    <div class="news-date">March 24, 2025</div>
+                    <h3 class="news-title">Norris Leads Championship After Australian GP Victory</h3>
+                    <p class="news-excerpt">McLaren's Lando Norris takes the early championship lead with a dominant performance at Albert Park.</p>
+                </div>
+            </article>
+
+            <article class="news-card reveal">
+                <div class="news-image" style="background-image: url('https://images.stockcake.com/public/5/5/b/55b07b58-4d48-4afd-a6d5-9c7c43e82376_large/motogp-cornering-action-stockcake.jpg');">
+                    <span class="news-category motogp">MotoGP</span>
+                </div>
+                <div class="news-content">
+                    <div class="news-date">March 20, 2025</div>
+                    <h3 class="news-title">Marquez Brothers Dominate Thailand GP</h3>
+                    <p class="news-excerpt">Marc and Alex Marquez continue their incredible form with another 1-2 finish for the Ducati family.</p>
+                </div>
+            </article>
+
+            <article class="news-card reveal">
+                <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=2070&auto=format&fit=crop');">
+                    <span class="news-category f1">Formula 1</span>
+                </div>
+                <div class="news-content">
+                    <div class="news-date">March 18, 2025</div>
+                    <h3 class="news-title">Verstappen Confident Despite Early Season Challenges</h3>
+                    <p class="news-excerpt">Red Bull champion remains optimistic about title defense as team addresses RB21 performance issues.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Video/Media Section -->
+    <section class="video-section" id="media">
+        <div class="section-header reveal">
+            <div>
+                <h2 class="section-title">Race Media</h2>
+                <p class="section-subtitle">Highlights, interviews, and onboard footage</p>
+            </div>
+        </div>
+        <div class="video-container reveal">
+            <div class="main-video">
+                <div class="video-placeholder" onclick="playVideo()">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Australian GP 2025: Race Highlights</h3>
+                        <div class="video-meta">
+                            <span>Formula 1</span>
+                            <span>•</span>
+                            <span>12:45</span>
+                            <span>•</span>
+                            <span>2.4M views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="video-grid">
+                <div class="video-thumb">
+                    <div class="thumb-img" style="background-image: url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=2070&auto=format&fit=crop');">
+                        <span class="thumb-duration">8:32</span>
+                    </div>
+                    <div class="thumb-title">MotoGP Thailand: Best Overtakes</div>
+                </div>
+                <div class="video-thumb">
+                    <div class="thumb-img" style="background-image: url('https://images.unsplash.com/photo-1541447270888-83e8494f9c08?q=80&w=2070&auto=format&fit=crop');">
+                        <span class="thumb-duration">15:20</span>
+                    </div>
+                    <div class="thumb-title">F1 Tech: 2025 Regulation Changes</div>
+                </div>
+                <div class="video-thumb">
+                    <div class="thumb-img" style="background-image: url('https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=2070&auto=format&fit=crop');">
+                        <span class="thumb-duration">5:45</span>
+                    </div>
+                    <div class="thumb-title">Driver Interview: Lando Norris</div>
+                </div>
+                <div class="video-thumb">
+                    <div class="thumb-img" style="background-image: url('https://www.youtube.com/watch?v=ci-cuioZ-5w');">
+                        <span class="thumb-duration">22:10</span>
+                    </div>
+                    <div class="thumb-title">MotoGP: Behind the Scenes</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section class="schedule" id="schedule">
+        <div class="section-header reveal">
+            <div>
+                <h2 class="section-title">Race Schedule</h2>
+                <p class="section-subtitle">Upcoming events and circuit information</p>
+            </div>
+        </div>
+        <div class="schedule-container reveal">
+            <div class="race-tabs">
+                <button class="race-tab active" onclick="switchTab('f1')">Formula 1</button>
+                <button class="race-tab" onclick="switchTab('motogp')">MotoGP</button>
+            </div>
+            <div class="race-list" id="race-list">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Audio Widget -->
+    <div class="audio-widget" id="audioWidget">
+        <button class="audio-btn" onclick="toggleAudio()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+        </button>
+        <div class="audio-info">
+            <strong>Live Commentary</strong>
+            <span>F1 Radio + Circuit Ambience</span>
+        </div>
+        <div class="audio-visualizer">
+            <div class="audio-bar"></div>
+            <div class="audio-bar"></div>
+            <div class="audio-bar"></div>
+            <div class="audio-bar"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>VELOCITY</h3>
+                <p>The premier destination for motorsport enthusiasts. Real-time data, exclusive content, and comprehensive coverage of Formula 1 and MotoGP championships.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">f</a>
+                    <a href="#" class="social-link">t</a>
+                    <a href="#" class="social-link">in</a>
+                    <a href="#" class="social-link">ig</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#standings">Standings</a></li>
+                    <li><a href="#schedule">Schedule</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#media">Media</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Championships</h4>
+                <ul>
+                    <li><a href="#">Formula 1</a></li>
+                    <li><a href="#">MotoGP</a></li>
+                    <li><a href="#">F2 & F3</a></li>
+                    <li><a href="#">Moto2 & Moto3</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Advertise</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Velocity Motorsport. All rights reserved.</p>
+            <p>Engineered for Speed</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data
+        const f1Data = [
+            { pos: 1, name: 'Lando Norris', team: 'McLaren', points: 423, color: '#ff8000' },
+            { pos: 2, name: 'Max Verstappen', team: 'Red Bull', points: 421, color: '#1e41ff' },
+            { pos: 3, name: 'Oscar Piastri', team: 'McLaren', points: 410, color: '#ff8000' },
+            { pos: 4, name: 'George Russell', team: 'Mercedes', points: 319, color: '#00d2be' },
+            { pos: 5, name: 'Charles Leclerc', team: 'Ferrari', points: 242, color: '#dc0000' }
+        ];
+
+        const motogpData = [
+            { pos: 1, name: 'Marc Marquez', team: 'Ducati', points: 545, color: '#dc0000' },
+            { pos: 2, name: 'Alex Marquez', team: 'Gresini', points: 467, color: '#dc0000' },
+            { pos: 3, name: 'Marco Bezzecchi', team: 'Aprilia', points: 353, color: '#ff0000' },
+            { pos: 4, name: 'Francesco Bagnaia', team: 'Ducati', points: 237, color: '#dc0000' },
+            { pos: 5, name: 'Pedro Acosta', team: 'KTM', points: 188, color: '#ff6600' }
+        ];
+
+        const f1Schedule = [
+            { round: 3, name: 'Japanese Grand Prix', circuit: 'Suzuka Circuit', date: '6-7 Apr', status: 'upcoming' },
+            { round: 4, name: 'Bahrain Grand Prix', circuit: 'Bahrain Int. Circuit', date: '13-14 Apr', status: 'upcoming' },
+            { round: 5, name: 'Saudi Arabian GP', circuit: 'Jeddah Street Circuit', date: '20-21 Apr', status: 'upcoming' },
+            { round: 6, name: 'Miami Grand Prix', circuit: 'Miami Int. Autodrome', date: '4-5 May', status: 'upcoming' }
+        ];
+
+        const motogpSchedule = [
+            { round: 2, name: 'Argentine Grand Prix', circuit: 'Termas de Río Hondo', date: '16 Mar', status: 'completed' },
+            { round: 3, name: 'Americas Grand Prix', circuit: 'Circuit of the Americas', date: '30 Mar', status: 'upcoming' },
+            { round: 4, name: 'Qatar Grand Prix', circuit: 'Lusail Int. Circuit', date: '13 Apr', status: 'upcoming' },
+            { round: 5, name: 'Spanish Grand Prix', circuit: 'Circuito de Jerez', date: '27 Apr', status: 'upcoming' }
+        ];
+
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('loader-hidden');
+                setTimeout(() => {
+                    document.getElementById('audioWidget').classList.add('visible');
+                }, 1000);
+            }, 2000);
+        });
+
+        // Navigation Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Active Section Highlight
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Populate Standings
+        function populateStandings() {
+            const f1Container = document.getElementById('f1-standings');
+            const motogpContainer = document.getElementById('motogp-standings');
+
+            f1Data.forEach(driver => {
+                f1Container.innerHTML += createDriverRow(driver);
+            });
+
+            motogpData.forEach(rider => {
+                motogpContainer.innerHTML += createDriverRow(rider);
+            });
+        }
+
+        function createDriverRow(data) {
+            return `
+                <div class="driver-row">
+                    <div class="position ${data.pos <= 3 ? 'top3' : ''}">${data.pos}</div>
+                    <div class="driver-img" style="border-color: ${data.color}">${data.name.split(' ').map(n => n[0]).join('')}</div>
+                    <div class="driver-info">
+                        <h4>${data.name}</h4>
+                        <span>${data.team}</span>
+                    </div>
+                    <div class="team-tag" style="color: ${data.color}">${data.team}</div>
+                    <div class="points">${data.points}</div>
+                </div>
+            `;
+        }
+
+        // Schedule Tabs
+        let currentTab = 'f1';
+        
+        function switchTab(series) {
+            currentTab = series;
+            const tabs = document.querySelectorAll('.race-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            renderSchedule();
+        }
+
+        function renderSchedule() {
+            const container = document.getElementById('race-list');
+            const data = currentTab === 'f1' ? f1Schedule : motogpSchedule;
+            
+            container.innerHTML = data.map(race => `
+                <div class="race-item">
+                    <div class="race-round">R${race.round}</div>
+                    <div class="race-info">
+                        <h3>${race.name}</h3>
+                        <p>${race.circuit}</p>
+                    </div>
+                    <div class="race-date">
+                        <div class="day">${race.date.split('-')[0]}</div>
+                        <div class="month">APR</div>
+                    </div>
+                    <div class="race-status">
+                        <span class="status-badge status-${race.status}">${race.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Audio Widget
+        let audioPlaying = false;
+        
+        function toggleAudio() {
+            audioPlaying = !audioPlaying;
+            const visualizer = document.querySelector('.audio-visualizer');
+            const btn = document.querySelector('.audio-btn');
+            
+            if (audioPlaying) {
+                visualizer.style.opacity = '1';
+                btn.style.background = 'linear-gradient(135deg, #00ff88, #00cc66)';
+            } else {
+                visualizer.style.opacity = '0.3';
+                btn.style.background = 'linear-gradient(135deg, var(--f1-red), var(--motogp-blue))';
+            }
+        }
+
+        // Video Player Simulation
+        function playVideo() {
+            alert('Video player would open here. In production, this would load a YouTube/Vimeo embed or HTML5 video player with F1/MotoGP highlights.');
+        }
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.parallax-bg');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Smooth Scroll for Navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize
+        populateStandings();
+        renderSchedule();
+
+        // Simulate Live Updates
+        setInterval(() => {
+            // Randomly update points slightly to simulate live data
+            const pointsElements = document.querySelectorAll('.points');
+            if (pointsElements.length > 0 && Math.random() > 0.7) {
+                const randomIdx = Math.floor(Math.random() * pointsElements.length);
+                const currentVal = parseInt(pointsElements[randomIdx].textContent);
+                pointsElements[randomIdx].textContent = currentVal + 1;
+                pointsElements[randomIdx].style.color = 'var(--accent-gold)';
+                setTimeout(() => {
+                    pointsElements[randomIdx].style.color = '';
+                }, 500);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
