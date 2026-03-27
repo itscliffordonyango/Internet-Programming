@@ -39,7 +39,7 @@
             <div class="container">
                 <h2 class="section-title">📸 Photo Gallery</h2>
                 <div class="gallery-grid">
-                    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1544703685-8e0d4321e34f?w=800" data-type="image">
+                    <div class="gallery-item" data-src="assets/images/monaco.jpeg" data-type="image">
 <img 
   src="assets/images/monaco.jpeg"
   data-src="assets/images/monaco.jpeg"
@@ -59,7 +59,7 @@
                             <h3>Grid Start</h3>
                         </div>
                     </div>
-                    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1570549717069-33bed2ebafec?w=800" data-type="image">
+                    <div class="gallery-item" data-src="assets/images/mtgp.jpeg" data-type="image">
 <img 
   src="assets/images/mtgp.jpeg"
   data-src="assets/images/mtgp.jpeg"
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <!-- Add more gallery items -->
-                    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1564519588242-b569190a185b?w=800" data-type="image">
+                    <div class="gallery-item" data-src="assets/images/Motor-gp.jpeg" data-type="image">
 <img src="assets/images/Motor-gp.jpeg" alt="Pit Stop" class="lazy" data-src="assets/images/Motor-gp.jpeg">
                         <div class="gallery-overlay">
                             <h3>Pit Action</h3>
@@ -84,17 +84,22 @@
             <div class="container">
                 <h2 class="section-title">🎥 Video Highlights</h2>
                 <div class="gallery-grid">
-                    <div class="gallery-item" data-src="https://www.youtube.com/embed/dYPbGC4cySY?autoplay=1" data-type="video">
-                        <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-                            <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-                                    src="https://www.youtube.com/embed/lL_d84cN1UY" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen loading="lazy">
-                            </iframe>
-                        </div>
+                    <div class="gallery-item" data-src="assets/videos/charles.mp4" data-type="video">
+                        <video controls preload="metadata" class="video-player" style="width: 100%; height: auto;">
+                            <source src="assets/videos/charles.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                         <div class="gallery-overlay">
-                            <h3>Monaco GP 2024</h3>
+                            <h3>Charles Action</h3>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-src="assets/videos/motor-gp.mp4" data-type="video">
+                        <video controls preload="metadata" class="video-player" style="width: 100%; height: auto;">
+                            <source src="assets/videos/motor-gp.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="gallery-overlay">
+                            <h3>MotoGP Highlights</h3>
                         </div>
                     </div>
                     <!-- More videos -->

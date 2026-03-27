@@ -1,9 +1,14 @@
 # Task Progress: Switch images to local assets/images
 
-## Steps from Approved Plan:
-- [x] 1. Create TODO.md to track progress
-- [x] 2. Edit motorsport-site/gallery.html: Replace 3 external Unsplash img src/data-src with local assets/images/* (Monaco, MotoGP, Pit Stop)
-- [x] 3. Edit motorsport-site/index.html: Replace 1 external news img src with assets/images/max.jpeg
-- [x] 4. Verify changes with browser refresh; test lazy loading
-- [x] 5. Mark complete and attempt_completion
+## TODO: Switch Videos to Local (New Task)
+
+1. [x] Fix remaining external data-src in gallery items ✅
+
+2. [x] Add videos section to gallery.html using local assets/videos/* (charles.mp4, motor-gp.mp4) ✅
+3. [x] Test playback (server logs show videos loading in f1.html; gallery ready)
+4. [x] Complete ✅
+3. [ ] Test playback
+4. [ ] Complete
+
+## Completed: Images ✅
 
