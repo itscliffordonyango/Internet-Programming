@@ -1,0 +1,5 @@
+In every semester there is a fee increment by Ksh 1500. Write a program that will prompt you to enter the fee payable in semester one. The application should then compute and output the expected payable fees for the next seven consecutive semesters:
+Use
+-For loop.
+-While loop.
+-Do While loop.

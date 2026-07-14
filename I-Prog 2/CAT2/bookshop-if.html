@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookshop If-else </title>
+  <style>
+    body { 
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f6f7fb; padding:24px;
+         }
+    .card {
+        max-width: 520px;
+        margin: 0 auto;
+        background:#fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+          }
+    h1 { 
+        font-size: 20px;
+        margin: 0 0 14px; 
+        }
+    label {
+         display:block;
+         margin-top: 12px;
+         font-weight: 600;
+         }
+    input, select { 
+        width:100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #d7d9e2;
+        border-radius: 8px;
+        }
+    button { 
+        margin-top: 16px;
+        width:100%;
+        padding: 12px;
+        border:0;
+        border-radius: 8px;
+        background:#2563eb;
+        color:white;
+        font-weight:700;
+        cursor:pointer;
+          }
+    button:hover {
+        background:#1d4ed8;
+                 }
+    .hint { color:#667085; font-size: 13px; margin-top: 8px; }
+    .result { margin-top: 16px; white-space: normal; font-size: 14px; padding: 12px; background:#f1f5f9; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Bookshop Discount Calculator</h1>
+
+    <form method="post" action="bookshop-if-else.php" id="bookshopForm">
+      <label for="course_code">Course Code</label>
+      <select id="course_code" name="course_code" required>
+        <option value="">-- Select --</option>
+        <option value="101">101 - Computer Science</option>
+        <option value="202">202 - Information Technology</option>
+        <option value="303">303 - Business Management</option>
+        <option value="404">404 - Engineering</option>
+        <option value="505">505 - Education</option>
+      </select>
+
+      <label for="book_price">Book Price</label>
+      <input id="book_price" name="book_price" type="number" min="0" step="0.01" placeholder="e.g. 1500" required />
+      <div class="hint">Enter your book price and select the course code. Submit to see the discount and total payable.</div>
+
+      <button type="submit">Get Result</button>
+    </form>
+
+    <div class="result">
+      <strong>Tip:</strong> The result will appear below after you submit.
+    </div>
+  </div>
+</body>
+</html>
+
