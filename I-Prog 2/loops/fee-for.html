@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fee Increment - For Loop</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;margin:0;padding:24px;}
+    .card{max-width:640px;background:#fff;border-radius:10px;padding:18px 18px;box-shadow:0 8px 20px rgba(0,0,0,.06)}
+    label{display:block;margin:10px 0 6px;font-weight:600}
+    input{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+    button{margin-top:14px;padding:10px 14px;border:0;border-radius:8px;background:#0b5ed7;color:#fff;cursor:pointer}
+    button:hover{background:#084298}
+    a{color:#0b5ed7}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Compute Fees (For Loop)</h2>
+    <p>Enter the fee payable in <strong>Semester 1</strong>. Each semester increases by <strong>Ksh 1500</strong> for the next seven consecutive semesters.</p>
+
+    <form action="fee-for.php" method="post">
+      <label for="fee1">Fee payable in Semester 1 (Ksh)</label>
+      <input id="fee1" name="fee1" type="number" min="0" step="any" required />
+      <button type="submit">Compute</button>
+    </form>
+
+    <p style="margin-top:16px"><a href="./">Back to loops folder</a></p>
+  </div>
+</body>
+</html>
+
