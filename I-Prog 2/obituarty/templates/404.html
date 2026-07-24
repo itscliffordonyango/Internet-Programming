@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found | Obituary Platform{% endblock %}
+
+{% block content %}
+<section class="error-section">
+    <div class="container">
+        <div class="error-card">
+            <div class="error-code">404</div>
+            <h1>Page Not Found</h1>
+            <p class="error-message">
+                We're sorry, but the page you're looking for could not be found.
+                It may have been removed or the link may be incorrect.
+            </p>
+            <div class="error-actions">
+                <a href="{{ url_for('obituary.index') }}" class="btn btn-primary">
+                    &larr; Return Home
+                </a>
+                <a href="{{ url_for('obituary.view_obituaries') }}" class="btn btn-secondary">
+                    View All Obituaries
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

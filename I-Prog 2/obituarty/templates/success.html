@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Obituary Submitted Successfully | Obituary Platform{% endblock %}
+
+{% block content %}
+<section class="success-section">
+    <div class="container">
+        <div class="success-card">
+            <div class="success-icon">&#10004;</div>
+            <h1>Obituary Submitted Successfully</h1>
+            <p class="success-message">
+                Thank you for submitting the obituary for <strong>{{ name }}</strong>.
+                The memorial page has been created and is now available.
+            </p>
+            <div class="success-actions">
+                <a href="{{ url_for('obituary.obituary_detail', slug=slug) }}" class="btn btn-primary">
+                    View Obituary
+                </a>
+                <a href="{{ url_for('obituary.submit_obituary') }}" class="btn btn-secondary">
+                    Submit Another
+                </a>
+                <a href="{{ url_for('obituary.view_obituaries') }}" class="btn btn-secondary">
+                    View All Obituaries
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

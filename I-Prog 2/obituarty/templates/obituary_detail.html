@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Remembering {{ obituary.name }} | Obituary Platform{% endblock %}
+
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block meta_keywords %}{{ keywords }}{% endblock %}
+{% block canonical_url %}{{ canonical_url }}{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="Remembering {{ obituary.name }} | Obituary Platform" />
+<meta property="og:description" content="{{ meta_description }}" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="{{ canonical_url }}" />
+<meta property="og:image" content="{{ og_image }}" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Remembering {{ obituary.name }} | Obituary Platform" />
+<meta name="twitter:description" content="{{ meta_description }}" />
+<meta name="twitter:image" content="{{ og_image }}" />
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "In Loving Memory of {{ obituary.name }}",
+    "name": "{{ obituary.name }}",
+    "description": {{ meta_description | tojson }},
+    "datePublished": "{{ obituary.submission_date.strftime('%Y-%m-%dT%H:%M:%S') }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ obituary.author }}"
+    },
+    "url": "{{ canonical_url }}"
+    {% if obituary.has_image() %}
+    ,
+    "image": "{{ og_image }}"
+    {% endif %}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="obituary-detail">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ url_for('obituary.index') }}">Home</a>
+            <span class="breadcrumb-separator">&rsaquo;</span>
+            <a href="{{ url_for('obituary.view_obituaries') }}">Obituaries</a>
+            <span class="breadcrumb-separator">&rsaquo;</span>
+            <span class="current">{{ obituary.name }}</span>
+        </nav>
+
+        <!-- Obituary Header -->
+        <header class="detail-header">
+            <h1>In Loving Memory of {{ obituary.name }}</h1>
+            <div class="detail-dates">
+                <time datetime="{{ obituary.date_of_birth }}">
+                    {{ obituary.date_of_birth.strftime('%B %d, %Y') }}
+                </time>
+                <span class="date-separator">&mdash;</span>
+                <time datetime="{{ obituary.date_of_death }}">
+                    {{ obituary.date_of_death.strftime('%B %d, %Y') }}
+                </time>
+            </div>
+            <p class="detail-submission">
+                Submitted by <strong>{{ obituary.author }}</strong> on
+                {{ obituary.submission_date.strftime('%B %d, %Y at %I:%M %p') }}
+            </p>
+        </header>
+
+        <!-- Media Display (if image uploaded) -->
+        {% if obituary.has_image() %}
+        <section class="detail-media">
+            <figure class="detail-image-figure">
+                <img
+                    src="{{ url_for('static', filename='uploads/' + obituary.image_filename) }}"
+                    alt="Photo of {{ obituary.name }}"
+                    class="detail-image"
+                    loading="lazy"
+                />
+                <figcaption>In loving memory of {{ obituary.name }}</figcaption>
+            </figure>
+        </section>
+        {% endif %}
+
+        <!-- Obituary Content -->
+        <section class="detail-content">
+            <div class="content-body">
+                {{ obituary.content | replace('\n', '<br>') | safe }}
+            </div>
+        </section>
+
+        <!-- Social Sharing -->
+        <footer class="detail-footer">
+            <div class="share-section">
+                <h2>Share This Obituary</h2>
+                <p>Help family and friends find this memorial by sharing it.</p>
+                <div class="share-buttons">
+                    <!-- Facebook -->
+                    <a
+                        href="https://www.facebook.com/sharer/sharer.php?u={{ canonical_url | urlencode }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="share-btn share-facebook"
+                        aria-label="Share on Facebook"
+                    >
+                        <span class="share-icon">f</span>
+                        <span class="share-label">Facebook</span>
+                    </a>
+
+                    <!-- X (Twitter) -->
+                    <a
+                        href="https://twitter.com/intent/tweet?text={{ ('Remembering ' ~ obituary.name ~ ' | Obituary Platform') | urlencode }}&url={{ canonical_url | urlencode }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="share-btn share-twitter"
+                        aria-label="Share on X (Twitter)"
+                    >
+                        <span class="share-icon">&#120143;</span>
+                        <span class="share-label">X (Twitter)</span>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a
+                        href="https://wa.me/?text={{ ('Remembering ' ~ obituary.name ~ ' - ' ~ canonical_url) | urlencode }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="share-btn share-whatsapp"
+                        aria-label="Share on WhatsApp"
+                    >
+                        <span class="share-icon">&#128222;</span>
+                        <span class="share-label">WhatsApp</span>
+                    </a>
+
+                    <!-- Copy Link -->
+                    <button
+                        type="button"
+                        class="share-btn share-copy"
+                        id="copy-link-btn"
+                        aria-label="Copy link to clipboard"
+                    >
+                        <span class="share-icon">&#128279;</span>
+                        <span class="share-label" id="copy-label">Copy Link</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-actions">
+                <a href="{{ url_for('obituary.view_obituaries') }}" class="btn btn-secondary">
+                    &larr; Back to All Obituaries
+                </a>
+            </div>
+        </footer>
+    </div>
+</article>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Copy link functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyBtn = document.getElementById('copy-link-btn');
+        const copyLabel = document.getElementById('copy-label');
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function() {
+                const url = '{{ canonical_url }}';
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(function() {
+                        copyLabel.textContent = 'Copied!';
+                        copyBtn.classList.add('copied');
+
+                        setTimeout(function() {
+                            copyLabel.textContent = 'Copy Link';
+                            copyBtn.classList.remove('copied');
+                        }, 3000);
+                    }).catch(function() {
+                        fallbackCopy(url);
+                    });
+                } else {
+                    fallbackCopy(url);
+                }
+            });
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            try {
+                document.execCommand('copy');
+                copyLabel.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(function() {
+                    copyLabel.textContent = 'Copy Link';
+                    copyBtn.classList.remove('copied');
+                }, 3000);
+            } catch (err) {
+                copyLabel.textContent = 'Failed to copy';
+            }
+
+            document.body.removeChild(textarea);
+        }
+    });
+</script>
+{% endblock %}
