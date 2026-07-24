@@ -3,8 +3,8 @@
  *
  * This script provides client-side validation for the obituary submission form.
  * Validation is performed on form submission and provides inline error messages
- * next to each field. Backend validation also exists as a security measure
- * since client-side validation can be bypassed.
+ * next to each field. Supports text field validation and optional image file
+ * validation (type and size checks).
  */
 
 (function () {
@@ -23,6 +23,7 @@
     const dodInput = document.getElementById("date_of_death");
     const contentTextarea = document.getElementById("content");
     const authorInput = document.getElementById("author");
+    const imageInput = document.getElementById("image");
 
     // Error message elements
     const nameError = document.getElementById("name-error");
@@ -30,6 +31,13 @@
     const dodError = document.getElementById("dod-error");
     const contentError = document.getElementById("content-error");
     const authorError = document.getElementById("author-error");
+    const imageError = document.getElementById("image-error");
+
+    // Allowed image MIME types
+    const ALLOWED_IMAGE_TYPES = [
+        "image/png", "image/jpeg", "image/gif", "image/webp", "image/bmp"
+    ];
+    const MAX_IMAGE_SIZE = 16 * 1024 * 1024; // 16 MB
 
     /**
      * Display an error message for a specific field.
@@ -72,11 +80,48 @@
             { input: dodInput, error: dodError },
             { input: contentTextarea, error: contentError },
             { input: authorInput, error: authorError },
+            { input: imageInput, error: imageError },
         ];
 
         fields.forEach(function (field) {
             clearError(field.input, field.error);
         });
+    }
+
+    /**
+     * Validate the uploaded image file (if any).
+     *
+     * @returns {boolean} True if the image is valid or no image provided.
+     */
+    function validateImage() {
+        if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+            // No file selected - optional field, so it's valid
+            return true;
+        }
+
+        const file = imageInput.files[0];
+
+        // Check file type
+        if (ALLOWED_IMAGE_TYPES.indexOf(file.type) === -1) {
+            showError(
+                imageInput,
+                imageError,
+                "Image must be PNG, JPG, JPEG, GIF, WebP, or BMP."
+            );
+            return false;
+        }
+
+        // Check file size
+        if (file.size > MAX_IMAGE_SIZE) {
+            showError(
+                imageInput,
+                imageError,
+                "Image must be smaller than 16 MB."
+            );
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -159,6 +204,11 @@
                 contentError,
                 "Obituary content must be at least 10 characters long."
             );
+            isValid = false;
+        }
+
+        // --- Validate Image (if provided) ---
+        if (!validateImage()) {
             isValid = false;
         }
 
@@ -272,14 +322,22 @@
         }
     });
 
-    // Validate on field blur (when user leaves a field)
-    const inputs = form.querySelectorAll("input, textarea");
-    inputs.forEach(function (input) {
+    // Validate text fields on blur
+    const textInputs = form.querySelectorAll("input:not([type='file']), textarea");
+    textInputs.forEach(function (input) {
         input.addEventListener("blur", validateField);
     });
 
+    // Validate image on file selection change
+    if (imageInput) {
+        imageInput.addEventListener("change", function () {
+            clearError(imageInput, imageError);
+            validateImage();
+        });
+    }
+
     // Clear errors when user starts typing in a field
-    inputs.forEach(function (input) {
+    textInputs.forEach(function (input) {
         input.addEventListener("input", function () {
             const id = input.id;
             switch (id) {

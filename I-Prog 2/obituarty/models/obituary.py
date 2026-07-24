@@ -18,6 +18,7 @@ class Obituary(db.Model):
 
     Each obituary contains biographical information, the obituary text,
     author details, and a unique SEO-friendly slug for URL generation.
+    Optionally includes a media image filename for uploaded photos.
     """
 
     __tablename__ = "obituaries"
@@ -34,6 +35,7 @@ class Obituary(db.Model):
         nullable=False
     )
     slug = db.Column(db.String(255), unique=True, nullable=False, index=True)
+    image_filename = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
         """Return a string representation of the obituary record."""
@@ -53,7 +55,12 @@ class Obituary(db.Model):
             "author": self.author,
             "submission_date": self.submission_date,
             "slug": self.slug,
+            "image_filename": self.image_filename,
         }
+
+    def has_image(self):
+        """Check if this obituary has an uploaded image."""
+        return self.image_filename is not None and self.image_filename != ""
 
     @staticmethod
     def generate_unique_slug(name, existing_slug=None):

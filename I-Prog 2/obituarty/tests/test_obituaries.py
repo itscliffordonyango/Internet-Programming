@@ -2,10 +2,11 @@
 Tests for the obituary routes and database operations.
 
 This module tests the core obituary functionality including
-submission, viewing, listing, searching, and pagination.
+submission, viewing, listing, searching, pagination, and media uploads.
 """
 
 import pytest
+import io
 from datetime import datetime, date
 from models.obituary import db, Obituary
 
@@ -159,6 +160,61 @@ class TestObituaryRoutes:
             assert b"<?xml" in response.data
             assert "application/xml" in response.content_type or "xml" in response.content_type
 
+    def test_obituary_submission_with_image(self, client, app):
+        """Test that an obituary can be submitted with an image upload."""
+        with app.app_context():
+            # Minimal valid PNG bytes
+            test_image_data = (
+                b'\x89PNG\r\n\x1a\n'
+                b'\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde'
+                b'\x00\x00\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00\x05\x18\xd8N'
+                b'\x00\x00\x00\x00IEND\xaeB`\x82'
+            )
+
+            response = client.post(
+                "/submit-obituary",
+                data={
+                    "name": "Image Test Person",
+                    "date_of_birth": "1970-01-01",
+                    "date_of_death": "2024-06-15",
+                    "content": "A wonderful person remembered with this obituary and image.",
+                    "author": "Test Author",
+                    "image": (io.BytesIO(test_image_data), "test-photo.png"),
+                },
+                follow_redirects=True,
+                content_type="multipart/form-data",
+            )
+            assert response.status_code == 200
+
+            # Verify the obituary was stored with an image filename
+            obituary = Obituary.query.filter_by(slug="image-test-person").first()
+            assert obituary is not None
+            assert obituary.name == "Image Test Person"
+            assert obituary.has_image() is True
+            assert obituary.image_filename is not None
+            assert obituary.image_filename.endswith(".png")
+            assert len(obituary.image_filename) > 5
+
+    def test_obituary_submission_with_invalid_image_type(self, client, app):
+        """Test that an invalid image file type is rejected."""
+        with app.app_context():
+            response = client.post(
+                "/submit-obituary",
+                data={
+                    "name": "Invalid Image Person",
+                    "date_of_birth": "1980-05-10",
+                    "date_of_death": "2024-01-20",
+                    "content": "Testing invalid image type submission for validation.",
+                    "author": "Tester",
+                    "image": (io.BytesIO(b"This is not an image file"), "document.txt"),
+                },
+                follow_redirects=True,
+                content_type="multipart/form-data",
+            )
+            assert response.status_code == 200
+            # Should show file type error
+            assert b"Image file must be" in response.data or b"allowed" in response.data.lower() or b"PNG" in response.data
+
     def test_duplicate_slug_handling(self, client, app):
         """Test that duplicate slugs are handled by appending a number."""
         with app.app_context():
@@ -195,4 +251,3 @@ class TestObituaryRoutes:
             ).first()
             assert obituary2 is not None
             assert obituary2.slug != "john-kamau"
-

@@ -40,6 +40,11 @@ class Config:
     # Minimum content length
     CONTENT_MIN_LENGTH = 10
 
+    # Media upload settings
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB max upload
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
+    ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp", "bmp"}
+
 
 class DevelopmentConfig(Config):
     """Development configuration."""
@@ -66,4 +71,3 @@ config = {
     "testing": TestingConfig,
     "default": DevelopmentConfig,
 }
-

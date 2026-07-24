@@ -53,6 +53,16 @@
         <div class="obituary-grid">
             {% for obituary in obituaries %}
             <article class="obituary-card">
+                {% if obituary.has_image() %}
+                <div class="card-image-wrapper">
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + obituary.image_filename) }}"
+                        alt="Photo of {{ obituary.name }}"
+                        class="card-image"
+                        loading="lazy"
+                    />
+                </div>
+                {% endif %}
                 <div class="card-header">
                     <h2 class="card-title">{{ obituary.name }}</h2>
                     <p class="card-dates">
@@ -150,4 +160,3 @@
     </div>
 </section>
 {% endblock %}
-

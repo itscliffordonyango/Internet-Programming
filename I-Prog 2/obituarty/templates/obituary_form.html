@@ -36,7 +36,7 @@
         </div>
         {% endif %}
 
-        <form id="obituary-form" action="{{ url_for('obituary.submit_obituary') }}" method="POST" novalidate>
+        <form id="obituary-form" action="{{ url_for('obituary.submit_obituary') }}" method="POST" enctype="multipart/form-data" novalidate>
             <div class="form-group">
                 <label for="name">
                     Full Name of the Deceased <span class="required-mark">*</span>
@@ -117,6 +117,32 @@
                 <span class="validation-message" id="author-error"></span>
             </div>
 
+            <!-- Media Upload Section -->
+            <div class="form-group">
+                <label for="image">Upload Photo (Optional)</label>
+                <div class="file-upload-wrapper">
+                    <div class="file-upload-area" id="file-upload-area">
+                        <div class="file-upload-icon">&#128247;</div>
+                        <p class="file-upload-text">
+                            <span class="file-upload-link">Click to upload</span> or drag and drop
+                        </p>
+                        <p class="file-upload-hint">PNG, JPG, JPEG, GIF, WebP, or BMP (Max 16 MB)</p>
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept=".png,.jpg,.jpeg,.gif,.webp,.bmp,image/png,image/jpeg,image/gif,image/webp,image/bmp"
+                            class="file-input"
+                        />
+                    </div>
+                    <div class="file-preview" id="file-preview" style="display: none;">
+                        <img id="preview-image" src="#" alt="Photo preview" />
+                        <button type="button" class="btn btn-secondary btn-sm" id="remove-image">Remove</button>
+                    </div>
+                    <span class="validation-message" id="image-error"></span>
+                </div>
+            </div>
+
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">
                     <span class="btn-icon">&#10013;</span>
@@ -133,5 +159,68 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/validation.js') }}"></script>
-{% endblock %}
+<script>
+    // Image preview and file upload UI handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('image');
+        const fileUploadArea = document.getElementById('file-upload-area');
+        const filePreview = document.getElementById('file-preview');
+        const previewImage = document.getElementById('preview-image');
+        const removeBtn = document.getElementById('remove-image');
 
+        if (fileInput) {
+            // Show preview when file is selected
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewImage.src = event.target.result;
+                        fileUploadArea.style.display = 'none';
+                        filePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Remove image and reset
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function() {
+                    fileInput.value = '';
+                    previewImage.src = '#';
+                    fileUploadArea.style.display = 'block';
+                    filePreview.style.display = 'none';
+                });
+            }
+
+            // Drag and drop support
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileUploadArea.classList.add('drag-over');
+            });
+
+            fileUploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                fileUploadArea.classList.remove('drag-over');
+            });
+
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileUploadArea.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    // Trigger change event
+                    const event = new Event('change');
+                    fileInput.dispatchEvent(event);
+                }
+            });
+
+            // Click on area triggers file input
+            fileUploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+        }
+    });
+</script>
+{% endblock %}

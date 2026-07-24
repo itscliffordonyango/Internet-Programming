@@ -11,11 +11,11 @@
 <meta property="og:description" content="{{ meta_description }}" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="{{ canonical_url }}" />
-<meta property="og:image" content="{{ url_for('static', filename='images/default-obituary-image.svg', _external=True) }}" />
+<meta property="og:image" content="{{ og_image }}" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Remembering {{ obituary.name }} | Obituary Platform" />
 <meta name="twitter:description" content="{{ meta_description }}" />
-<meta name="twitter:image" content="{{ url_for('static', filename='images/default-obituary-image.svg', _external=True) }}" />
+<meta name="twitter:image" content="{{ og_image }}" />
 {% endblock %}
 
 {% block structured_data %}
@@ -32,6 +32,10 @@
         "name": "{{ obituary.author }}"
     },
     "url": "{{ canonical_url }}"
+    {% if obituary.has_image() %}
+    ,
+    "image": "{{ og_image }}"
+    {% endif %}
 }
 </script>
 {% endblock %}
@@ -65,6 +69,21 @@
                 {{ obituary.submission_date.strftime('%B %d, %Y at %I:%M %p') }}
             </p>
         </header>
+
+        <!-- Media Display (if image uploaded) -->
+        {% if obituary.has_image() %}
+        <section class="detail-media">
+            <figure class="detail-image-figure">
+                <img
+                    src="{{ url_for('static', filename='uploads/' + obituary.image_filename) }}"
+                    alt="Photo of {{ obituary.name }}"
+                    class="detail-image"
+                    loading="lazy"
+                />
+                <figcaption>In loving memory of {{ obituary.name }}</figcaption>
+            </figure>
+        </section>
+        {% endif %}
 
         <!-- Obituary Content -->
         <section class="detail-content">
@@ -159,11 +178,9 @@
                             copyBtn.classList.remove('copied');
                         }, 3000);
                     }).catch(function() {
-                        // Fallback method
                         fallbackCopy(url);
                     });
                 } else {
-                    // Fallback for older browsers
                     fallbackCopy(url);
                 }
             });
@@ -194,4 +211,3 @@
     });
 </script>
 {% endblock %}
-

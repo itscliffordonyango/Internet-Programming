@@ -2,14 +2,52 @@
 Obituary routes for the Obituary Management Platform.
 
 This module defines all routes related to obituary CRUD operations,
-including form submission, listing, searching, pagination, and detail views.
+including form submission, listing, searching, pagination, detail views,
+and media upload handling.
 """
 
+import os
+import uuid
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+from werkzeug.utils import secure_filename
 from models.obituary import db, Obituary
 
 obituary_bp = Blueprint("obituary", __name__)
+
+# Allowed image file extensions
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp", "bmp"}
+
+
+def allowed_file(filename):
+    """Check if the uploaded file has an allowed extension."""
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def save_uploaded_file(file):
+    """
+    Save an uploaded file to the uploads directory.
+
+    Args:
+        file: The uploaded file object from the request.
+
+    Returns:
+        The unique filename saved, or None if no valid file was provided.
+    """
+    if file and file.filename and file.filename.strip():
+        if allowed_file(file.filename):
+            # Generate a unique filename to prevent collisions
+            original_ext = file.filename.rsplit(".", 1)[1].lower()
+            unique_filename = f"{uuid.uuid4().hex}.{original_ext}"
+            upload_folder = current_app.config.get(
+                "UPLOAD_FOLDER",
+                os.path.join(current_app.root_path, "static", "uploads"),
+            )
+            os.makedirs(upload_folder, exist_ok=True)
+            file_path = os.path.join(upload_folder, unique_filename)
+            file.save(file_path)
+            return unique_filename
+    return None
 
 
 @obituary_bp.route("/")
@@ -24,7 +62,7 @@ def submit_obituary():
     Handle obituary submission.
 
     GET: Display the obituary submission form.
-    POST: Validate and process the submitted obituary data.
+    POST: Validate and process the submitted obituary data including optional media upload.
     """
     if request.method == "GET":
         return render_template("obituary_form.html")
@@ -84,6 +122,14 @@ def submit_obituary():
     elif len(content) < 10:
         errors.append("Obituary content must be at least 10 characters long.")
 
+    # Validate uploaded file (if provided)
+    uploaded_file = request.files.get("image")
+    file_error = None
+    if uploaded_file and uploaded_file.filename and uploaded_file.filename.strip():
+        if not allowed_file(uploaded_file.filename):
+            file_error = "Image file must be one of: PNG, JPG, JPEG, GIF, WebP, or BMP."
+            errors.append(file_error)
+
     # If there are validation errors, re-render the form with errors
     if errors:
         return render_template(
@@ -103,6 +149,9 @@ def submit_obituary():
         # Generate a unique slug
         slug = Obituary.generate_unique_slug(name)
 
+        # Save the uploaded image file (if any)
+        image_filename = save_uploaded_file(uploaded_file)
+
         # Create new obituary record
         obituary = Obituary(
             name=name,
@@ -111,6 +160,7 @@ def submit_obituary():
             content=content,
             author=author,
             slug=slug,
+            image_filename=image_filename,
         )
 
         db.session.add(obituary)
@@ -121,9 +171,8 @@ def submit_obituary():
 
     except Exception as e:
         db.session.rollback()
-        # Log the error server-side (in production, use proper logging)
-        app = __import__("flask").current_app
-        app.logger.error(f"Database error during obituary submission: {str(e)}")
+        # Log the error server-side
+        current_app.logger.error(f"Database error during obituary submission: {str(e)}")
         flash(
             "An unexpected error occurred while submitting the obituary. "
             "Please try again later.",
@@ -208,9 +257,14 @@ def obituary_detail(slug):
     )
 
     # Get application URL for canonical and social tags
-    from flask import current_app
     app_url = current_app.config.get("APP_URL", "http://localhost:5000")
     canonical_url = f"{app_url}/obituary/{slug}"
+
+    # Build image URL for social sharing
+    if obituary.has_image():
+        og_image = f"{app_url}/static/uploads/{obituary.image_filename}"
+    else:
+        og_image = f"{app_url}/static/images/default-obituary-image.svg"
 
     return render_template(
         "obituary_detail.html",
@@ -219,5 +273,5 @@ def obituary_detail(slug):
         keywords=keywords,
         canonical_url=canonical_url,
         app_url=app_url,
+        og_image=og_image,
     )
-
