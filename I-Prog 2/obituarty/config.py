@@ -1,8 +1,5 @@
 """
 Configuration module for the Obituary Management Platform.
-
-This module contains the application configuration classes,
-including database URI, secret key, and other settings.
 """
 
 import os
@@ -14,18 +11,44 @@ load_dotenv()
 class Config:
     """Base configuration class."""
 
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-secret-key-change-in-production"
-
-    # Database configuration
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL",
-        f"sqlite:///{os.path.join(BASE_DIR, 'database', 'obituary_platform.db')}",
+    SECRET_KEY = (
+        os.environ.get("SECRET_KEY")
+        or "dev-secret-key-change-in-production"
     )
+
+    # Project root directory
+    BASE_DIR = os.path.abspath(
+        os.path.dirname(__file__)
+    )
+
+    # Ensure the database directory exists
+    DATABASE_DIR = os.path.join(
+        BASE_DIR,
+        "database"
+    )
+
+    os.makedirs(
+        DATABASE_DIR,
+        exist_ok=True
+    )
+
+    # Always use an absolute SQLite path
+    DATABASE_PATH = os.path.join(
+        DATABASE_DIR,
+        "obituary_platform.db"
+    )
+
+    SQLALCHEMY_DATABASE_URI = (
+        f"sqlite:///{DATABASE_PATH}"
+    )
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Application URL (used for SEO canonical URLs)
-    APP_URL = os.environ.get("APP_URL") or "http://localhost:5000"
+    # Application URL
+    APP_URL = (
+        os.environ.get("APP_URL")
+        or "http://localhost:5000"
+    )
 
     # Pagination
     OBITUARIES_PER_PAGE = 6
@@ -41,9 +64,22 @@ class Config:
     CONTENT_MIN_LENGTH = 10
 
     # Media upload settings
-    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB max upload
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
-    ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp", "bmp"}
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+
+    UPLOAD_FOLDER = os.path.join(
+        BASE_DIR,
+        "static",
+        "uploads"
+    )
+
+    ALLOWED_EXTENSIONS = {
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "webp",
+        "bmp",
+    }
 
 
 class DevelopmentConfig(Config):
@@ -62,7 +98,10 @@ class TestingConfig(Config):
     """Testing configuration."""
 
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+
+    SQLALCHEMY_DATABASE_URI = (
+        "sqlite:///:memory:"
+    )
 
 
 config = {

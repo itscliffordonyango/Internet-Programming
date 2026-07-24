@@ -71,11 +71,6 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. **Configure environment variables (optional)**
-```bash
-cp .env.example .env
-# Edit .env with your settings if needed
-```
 
 ## Running the Application
 
