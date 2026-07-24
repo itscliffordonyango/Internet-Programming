@@ -10,7 +10,6 @@ import os
 import uuid
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
-from werkzeug.utils import secure_filename
 from models.obituary import db, Obituary
 
 obituary_bp = Blueprint("obituary", __name__)
@@ -124,11 +123,9 @@ def submit_obituary():
 
     # Validate uploaded file (if provided)
     uploaded_file = request.files.get("image")
-    file_error = None
     if uploaded_file and uploaded_file.filename and uploaded_file.filename.strip():
         if not allowed_file(uploaded_file.filename):
-            file_error = "Image file must be one of: PNG, JPG, JPEG, GIF, WebP, or BMP."
-            errors.append(file_error)
+            errors.append("Image file must be one of: PNG, JPG, JPEG, GIF, WebP, or BMP.")
 
     # If there are validation errors, re-render the form with errors
     if errors:

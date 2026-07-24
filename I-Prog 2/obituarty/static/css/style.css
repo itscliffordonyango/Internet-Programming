@@ -1,4 +1,4 @@
-/* ===== CSS Reset & Base ===== */
+/*  CSS Reset & Base  */
 *,
 *::before,
 *::after {
@@ -74,14 +74,14 @@ a:hover {
     color: var(--color-accent);
 }
 
-/* ===== Container ===== */
+/*  Container  */
 .container {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 1.5rem;
 }
 
-/* ===== Typography ===== */
+/*  Typography  */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     color: var(--color-primary);
@@ -97,7 +97,7 @@ p {
     margin-bottom: 1rem;
 }
 
-/* ===== Navigation Header ===== */
+/*  Navigation Header  */
 .site-header {
     background-color: var(--color-surface);
     border-bottom: 1px solid var(--color-border);
@@ -164,7 +164,7 @@ p {
     color: var(--color-text);
 }
 
-/* ===== Hero Section ===== */
+/*  Hero Section  */
 .hero {
     background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
     color: var(--color-surface);
@@ -212,7 +212,7 @@ p {
     flex-wrap: wrap;
 }
 
-/* ===== Buttons ===== */
+/*  Buttons  */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -312,7 +312,7 @@ p {
     transform: none;
 }
 
-/* ===== About Section ===== */
+/*  About Section  */
 .about-section {
     padding: 5rem 0;
     background-color: var(--color-bg-alt);
@@ -358,7 +358,7 @@ p {
     font-size: 0.95rem;
 }
 
-/* ===== How It Works ===== */
+/*  How It Works  */
 .how-it-works {
     padding: 5rem 0;
     background-color: var(--color-surface);
@@ -402,7 +402,7 @@ p {
     color: var(--color-text-light);
 }
 
-/* ===== Form Section ===== */
+/*  Form Section  */
 .form-section {
     padding: 4rem 0;
 }
@@ -426,7 +426,7 @@ p {
     color: var(--color-error);
 }
 
-/* ===== Form Styles ===== */
+/*  Form Styles  */
 form {
     max-width: 700px;
     margin: 0 auto;
@@ -517,7 +517,7 @@ textarea {
     min-width: 160px;
 }
 
-/* ===== Alerts ===== */
+/*  Alerts  */
 .alert {
     padding: 1rem;
     border-radius: var(--border-radius);
@@ -546,7 +546,7 @@ textarea {
     margin-bottom: 0.25rem;
 }
 
-/* ===== Listing Section ===== */
+/*  Listing Section  */
 .listing-section {
     padding: 4rem 0;
 }
@@ -564,7 +564,7 @@ textarea {
     flex-shrink: 0;
 }
 
-/* ===== Search Form ===== */
+/*  Search Form  */
 .search-form {
     background: none;
     padding: 0;
@@ -602,7 +602,7 @@ textarea {
     color: var(--color-text-muted);
 }
 
-/* ===== Obituary Grid ===== */
+/*  Obituary Grid  */
 .obituary-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -680,7 +680,7 @@ textarea {
     color: var(--color-text-muted);
 }
 
-/* ===== Pagination ===== */
+/*  Pagination  */
 .pagination {
     display: flex;
     justify-content: center;
@@ -730,7 +730,7 @@ textarea {
     cursor: default;
 }
 
-/* ===== Empty State ===== */
+/*  Empty State  */
 .empty-state {
     text-align: center;
     padding: 4rem 2rem;
@@ -759,7 +759,7 @@ textarea {
     margin-top: 1rem;
 }
 
-/* ===== Detail Page ===== */
+/*  Detail Page  */
 .obituary-detail {
     padding: 3rem 0;
 }
@@ -837,7 +837,7 @@ textarea {
     box-shadow: var(--shadow-sm);
 }
 
-/* ===== Share Buttons ===== */
+/*  Share Buttons  */
 .share-section {
     text-align: center;
     margin-bottom: 2rem;
@@ -932,7 +932,7 @@ textarea {
     margin-top: 2rem;
 }
 
-/* ===== Success Section ===== */
+/*  Success Section  */
 .success-section {
     padding: 5rem 0;
 }
@@ -966,7 +966,7 @@ textarea {
     flex-wrap: wrap;
 }
 
-/* ===== Error Section (404/500) ===== */
+/*  Error Section (404/500)  */
 .error-section {
     padding: 5rem 0;
 }
@@ -1002,7 +1002,7 @@ textarea {
     flex-wrap: wrap;
 }
 
-/* ===== Footer ===== */
+/*  Footer  */
 .site-footer {
     background-color: var(--color-primary-dark);
     color: rgba(255, 255, 255, 0.7);
@@ -1016,7 +1016,7 @@ textarea {
     font-size: 0.9rem;
 }
 
-/* ===== Responsive Design ===== */
+/*  Responsive Design  */
 
 /* Tablet */
 @media (max-width: 768px) {
@@ -1145,7 +1145,7 @@ textarea {
     }
 }
 
-/* ===== Accessibility ===== */
+/*  Accessibility  */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -1167,7 +1167,7 @@ textarea {
     }
 }
 
-/* ===== File Upload / Media Styles ===== */
+/*  File Upload / Media Styles  */
 
 .file-upload-wrapper {
     margin-top: 0.5rem;
@@ -1253,7 +1253,7 @@ textarea {
     color: var(--color-text);
 }
 
-/* ===== Card Image ===== */
+/*  Card Image  */
 
 .card-image-wrapper {
     width: 100%;
@@ -1273,7 +1273,7 @@ textarea {
     transform: scale(1.05);
 }
 
-/* ===== Detail Image ===== */
+/*  Detail Image  */
 
 .detail-media {
     max-width: 750px;
@@ -1302,7 +1302,7 @@ textarea {
     font-style: italic;
 }
 
-/* ===== Apply btn-sm to secondary buttons in dark areas ===== */
+/*  Apply btn-sm to secondary buttons in dark areas  */
 .btn-secondary.btn-sm {
     color: var(--color-text);
     border-color: var(--color-border);
@@ -1314,7 +1314,7 @@ textarea {
     color: var(--color-text);
 }
 
-/* ===== Focus styles for keyboard navigation ===== */
+/*  Focus styles for keyboard navigation  */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,

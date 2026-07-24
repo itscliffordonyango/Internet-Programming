@@ -2,18 +2,49 @@
 Obituary Management Platform - Main Application Entry Point.
 
 This module initializes and configures the Flask application,
-registers blueprints, sets up the database, and configures
-error handlers.
+registers blueprints, sets up the database with automatic
+schema migration, and configures error handlers.
 """
 
 import os
 from flask import Flask, render_template
 from config import config
+from sqlalchemy import inspect
 
 # Import db from models to ensure proper initialization
 from models.obituary import db
 from routes.obituary_routes import obituary_bp
 from routes.seo_routes import seo_bp
+
+
+def upgrade_database_schema(app):
+    """
+    Automatically add missing columns to existing database tables.
+
+    SQLAlchemy's db.create_all() does not alter existing tables.
+    This helper checks if expected columns exist and adds them
+    if missing, preventing "no such column" errors when the
+    model is updated (e.g., adding image_filename).
+    """
+    with app.app_context():
+        inspector = inspect(db.engine)
+        # Expected model columns that may need to be added
+        expected_columns = {
+            "image_filename": "VARCHAR(255)",
+        }
+        existing_columns = [
+            col["name"] for col in inspector.get_columns("obituaries")
+        ]
+        for col_name, col_type in expected_columns.items():
+            if col_name not in existing_columns:
+                with db.engine.connect() as conn:
+                    conn.exec_driver_sql(
+                        f"ALTER TABLE obituaries ADD COLUMN {col_name} {col_type}"
+                    )
+                    conn.commit()
+                    app.logger.info(
+                        f"Added missing column '{col_name}' to obituaries table"
+                    )
 
 
 def create_app(config_name=None):
@@ -35,12 +66,21 @@ def create_app(config_name=None):
     app = Flask(__name__)
     app.config.from_object(config.get(config_name, config["default"]))
 
+    # Ensure the database directory exists (required for SQLite)
+    db_uri = app.config.get("SQLALCHEMY_DATABASE_URI", "")
+    if db_uri.startswith("sqlite"):
+        db_path = db_uri.replace("sqlite:///", "")
+        db_dir = os.path.dirname(db_path)
+        if db_dir and not os.path.exists(db_dir):
+            os.makedirs(db_dir, exist_ok=True)
+
     # Initialize database
     db.init_app(app)
 
-    # Create database tables within application context
+    # Create database tables and run schema migration
     with app.app_context():
         db.create_all()
+        upgrade_database_schema(app)
 
     # Register blueprints
     app.register_blueprint(obituary_bp)
@@ -80,4 +120,3 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True)
-

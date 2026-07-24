@@ -1,10 +1,10 @@
 /**
- * Frontend validation for the Obituary Management Platform.
- *
- * This script provides client-side validation for the obituary submission form.
- * Validation is performed on form submission and provides inline error messages
- * next to each field. Supports text field validation and optional image file
- * validation (type and size checks).
+  Frontend validation for the Obituary Management Platform.
+ 
+  This script provides client-side validation for the obituary submission form.
+  Validation is performed on form submission and provides inline error messages
+  next to each field. Supports text field validation and optional image file
+  validation (type and size checks).
  */
 
 (function () {

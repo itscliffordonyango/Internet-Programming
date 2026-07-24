@@ -1,6 +1,4 @@
 """
-Obituary model for the Obituary Management Platform.
-
 This module defines the Obituary SQLAlchemy model representing
 a deceased person's obituary record in the database.
 """
@@ -14,8 +12,6 @@ db = SQLAlchemy()
 
 class Obituary(db.Model):
     """
-    Obituary model representing a deceased person's memorial record.
-
     Each obituary contains biographical information, the obituary text,
     author details, and a unique SEO-friendly slug for URL generation.
     Optionally includes a media image filename for uploaded photos.
@@ -38,14 +34,14 @@ class Obituary(db.Model):
     image_filename = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
-        """Return a string representation of the obituary record."""
+        """Returning a string representation of the obituary record."""
         return (
             f"<Obituary(id={self.id}, name='{self.name}', "
             f"slug='{self.slug}', submission_date='{self.submission_date}')>"
         )
 
     def to_dict(self):
-        """Convert the obituary record to a dictionary for templates."""
+        """Converting the obituary record to a dictionary for templates."""
         return {
             "id": self.id,
             "name": self.name,
@@ -69,6 +65,7 @@ class Obituary(db.Model):
 
         If an obituary with the same slug already exists, append a number
         to make it unique (e.g., 'john-kamau-2').
+        This is to avoid duplicate data entry to the database
 
         Args:
             name: The full name of the deceased person.

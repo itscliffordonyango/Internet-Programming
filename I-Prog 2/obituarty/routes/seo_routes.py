@@ -1,8 +1,6 @@
 """
 SEO routes for the Obituary Management Platform.
 
-This module defines routes for SEO-related features including
-the XML sitemap generation.
 """
 
 from flask import Blueprint, Response, render_template
@@ -14,7 +12,7 @@ seo_bp = Blueprint("seo", __name__)
 @seo_bp.route("/sitemap.xml")
 def sitemap():
     """
-    Generate an XML sitemap of the website.
+    Generates an XML sitemap of the website.
 
     The sitemap includes:
     - Home page
