@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Obituary Management Platform{% endblock %}
+
+{% block meta_description %}
+Remember and honor the lives of loved ones. Submit obituaries, share memories, and find information about those who have passed.
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>In Loving Memory</h1>
+        <p class="hero-subtitle">
+            A compassionate platform to remember, honor, and share the lives of those who have touched our hearts.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('obituary.submit_obituary') }}" class="btn btn-primary btn-lg">
+                <span class="btn-icon">&#10013;</span>
+                Submit an Obituary
+            </a>
+            <a href="{{ url_for('obituary.view_obituaries') }}" class="btn btn-secondary btn-lg">
+                View All Obituaries
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section">
+    <div class="container">
+        <h2>About This Platform</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-icon">&#9998;</div>
+                <h3>Submit Obituaries</h3>
+                <p>Easily submit and share obituary information with family and friends through our simple form.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">&#128269;</div>
+                <h3>Search &amp; Discover</h3>
+                <p>Search through our collection of obituaries to find and remember loved ones.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">&#128101;</div>
+                <h3>Share Memories</h3>
+                <p>Share obituary pages on social media to help spread the word and celebrate lives lived.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">&#128329;</div>
+                <h3>Lasting Memorials</h3>
+                <p>Each obituary creates a permanent online memorial that can be visited anytime.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="container">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Fill the Form</h3>
+                <p>Provide the name, dates, and a heartfelt tribute for your loved one.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Submit</h3>
+                <p>Submit the obituary — it will be stored securely and given a unique page.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Share</h3>
+                <p>Share the obituary page with family and friends via social media or direct link.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

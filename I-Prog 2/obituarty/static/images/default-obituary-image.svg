@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <rect width="400" height="300" fill="#f2eee9" rx="8"/>
+  <!-- Cross/Crucifix symbol -->
+  <g transform="translate(200, 130)">
+    <line x1="0" y1="-40" x2="0" y2="40" stroke="#c4956a" stroke-width="6" stroke-linecap="round"/>
+    <line x1="-25" y1="-15" x2="25" y2="-15" stroke="#c4956a" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <!-- Text -->
+  <text x="200" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#6b6b6b">In Loving Memory</text>
+  <text x="200" y="240" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#999999">Obituary Platform</text>
+</svg>

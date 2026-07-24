@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}View All Obituaries | Obituary Platform{% endblock %}
+
+{% block meta_description %}Browse through all submitted obituaries. Search by name, author, or content to find and remember loved ones.{% endblock %}
+
+{% block content %}
+<section class="listing-section">
+    <div class="container">
+        <div class="listing-header">
+            <h1>All Obituaries</h1>
+            <a href="{{ url_for('obituary.submit_obituary') }}" class="btn btn-primary">
+                <span class="btn-icon">&#10013;</span>
+                Submit an Obituary
+            </a>
+        </div>
+
+        <!-- Search Form -->
+        <form class="search-form" method="GET" action="{{ url_for('obituary.view_obituaries') }}">
+            <div class="search-group">
+                <input
+                    type="text"
+                    name="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="Search by name, author, or content..."
+                    value="{{ search_query }}"
+                    aria-label="Search obituaries"
+                />
+                <button type="submit" class="btn btn-search" aria-label="Search">
+                    &#128269; Search
+                </button>
+                {% if search_query %}
+                <a href="{{ url_for('obituary.view_obituaries') }}" class="btn btn-clear" aria-label="Clear search">
+                    &#10005; Clear
+                </a>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- Results Info -->
+        {% if search_query %}
+        <div class="search-info">
+            <p>
+                Showing results for "<strong>{{ search_query }}</strong>"
+                <span class="result-count">({{ pagination.total }} obituaries found)</span>
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Obituary Cards -->
+        {% if obituaries %}
+        <div class="obituary-grid">
+            {% for obituary in obituaries %}
+            <article class="obituary-card">
+                <div class="card-header">
+                    <h2 class="card-title">{{ obituary.name }}</h2>
+                    <p class="card-dates">
+                        {{ obituary.date_of_birth.strftime('%B %d, %Y') }} &mdash;
+                        {{ obituary.date_of_death.strftime('%B %d, %Y') }}
+                    </p>
+                </div>
+                <div class="card-body">
+                    <p class="card-content">
+                        {{ obituary.content[:200] }}{% if obituary.content|length > 200 %}...{% endif %}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-meta">
+                        <span class="card-author">By {{ obituary.author }}</span>
+                        <span class="card-date">{{ obituary.submission_date.strftime('%b %d, %Y') }}</span>
+                    </div>
+                    <a href="{{ url_for('obituary.obituary_detail', slug=obituary.slug) }}" class="btn btn-read">
+                        Read Full Obituary &rarr;
+                    </a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination.pages > 1 %}
+        <nav class="pagination" aria-label="Pagination">
+            <!-- Previous Button -->
+            {% if pagination.has_prev %}
+            <a
+                href="{{ url_for('obituary.view_obituaries', page=pagination.prev_num, search=search_query) }}"
+                class="pagination-link"
+                aria-label="Previous page"
+            >
+                &laquo; Previous
+            </a>
+            {% else %}
+            <span class="pagination-link disabled">&laquo; Previous</span>
+            {% endif %}
+
+            <!-- Page Numbers -->
+            {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                {% if page_num %}
+                    {% if page_num == pagination.page %}
+                    <span class="pagination-link active" aria-current="page">{{ page_num }}</span>
+                    {% else %}
+                    <a
+                        href="{{ url_for('obituary.view_obituaries', page=page_num, search=search_query) }}"
+                        class="pagination-link"
+                    >
+                        {{ page_num }}
+                    </a>
+                    {% endif %}
+                {% else %}
+                <span class="pagination-link ellipsis">&hellip;</span>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Next Button -->
+            {% if pagination.has_next %}
+            <a
+                href="{{ url_for('obituary.view_obituaries', page=pagination.next_num, search=search_query) }}"
+                class="pagination-link"
+                aria-label="Next page"
+            >
+                Next &raquo;
+            </a>
+            {% else %}
+            <span class="pagination-link disabled">Next &raquo;</span>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            {% if search_query %}
+            <div class="empty-icon">&#128270;</div>
+            <h2>No Results Found</h2>
+            <p>No obituaries matched your search for "<strong>{{ search_query }}</strong>".</p>
+            <p>Try different search terms or browse all obituaries.</p>
+            <a href="{{ url_for('obituary.view_obituaries') }}" class="btn btn-secondary">View All Obituaries</a>
+            {% else %}
+            <div class="empty-icon">&#128329;</div>
+            <h2>No Obituaries Yet</h2>
+            <p>There are no obituaries submitted yet. Be the first to submit one.</p>
+            <a href="{{ url_for('obituary.submit_obituary') }}" class="btn btn-primary">
+                <span class="btn-icon">&#10013;</span>
+                Submit an Obituary
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
