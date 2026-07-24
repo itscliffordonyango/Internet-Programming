@@ -1,6 +1,6 @@
 # Obituary Management Platform
 
-A compassionate, production-quality web application for submitting, managing, and sharing obituaries. Built with Flask and SQLAlchemy, this platform provides a dignified space for remembering and honoring loved ones.
+A web application for submitting, managing, and sharing obituaries. A platform that provides a dignified space for remembering and honoring loved ones.
 
 ## Features
 
@@ -87,57 +87,6 @@ The application will start at `http://localhost:5000`.
 
 The database is created automatically on first run.
 
-## Project Structure
-
-```
-obituary-platform/
-├── app.py                  # Application entry point and factory
-├── config.py               # Configuration classes
-├── requirements.txt        # Python dependencies
-├── .env.example           # Example environment variables
-├── .gitignore             # Git ignore rules
-├── README.md              # This file
-│
-├── database/              # SQLite database storage
-│   └── obituary_platform.db
-│
-├── models/                # Database models
-│   ├── __init__.py
-│   └── obituary.py        # Obituary model
-│
-├── routes/                # Route blueprints
-│   ├── __init__.py
-│   ├── obituary_routes.py # Obituary CRUD routes
-│   └── seo_routes.py      # SEO routes (sitemap)
-│
-├── templates/             # Jinja2 templates
-│   ├── base.html          # Base template with navigation
-│   ├── index.html         # Home page
-│   ├── obituary_form.html # Submission form
-│   ├── view_obituaries.html # Listing page
-│   ├── obituary_detail.html # Individual obituary
-│   ├── success.html       # Success page
-│   ├── 404.html           # Not found page
-│   ├── 500.html           # Server error page
-│   └── sitemap.xml        # Sitemap template
-│
-├── static/                # Static assets
-│   ├── css/
-│   │   └── style.css      # Application styles
-│   ├── js/
-│   │   └── validation.js  # Client-side validation
-│   └── images/
-│       └── default-obituary-image.svg
-│
-├── tests/                 # Automated tests
-│   ├── __init__.py
-│   ├── conftest.py        # Test fixtures
-│   ├── test_obituaries.py # Route tests
-│   └── test_validation.py # Validation tests
-│
-└── seo/
-    └── sitemap.xml        # Generated sitemap output
-```
 
 ## Routes
 
@@ -177,25 +126,6 @@ database/obituary_platform.db
 
 The slug is automatically generated from the person's name. If duplicates exist, a number is appended (e.g., `john-kamau-2`).
 
-## Testing
-
-Run the test suite with pytest:
-
-```bash
-pytest
-```
-
-Or with verbose output:
-
-```bash
-pytest -v
-```
-
-### Tests included
-
-- **Route tests**: Home page, form submission, listing, detail pages, search, pagination, sitemap
-- **Validation tests**: Empty fields, invalid dates, date logic, length limits, duplicate slugs
-- **Error tests**: 404 handling, database rollback behaviour
 
 ## SEO Features
 
@@ -239,23 +169,6 @@ Available at `/sitemap.xml`, includes:
 - Obituary listing page
 - Every individual obituary URL
 
-## GitHub Submission
-
-```bash
-# Initialize Git
-git init
-git add .
-git commit -m "Initial commit: Obituary Management Platform"
-
-# Create main branch
-git branch -M main
-
-# Add remote repository
-git remote add origin <repository-url>
-
-# Push to GitHub
-git push -u origin main
-```
 
 ## Security
 
@@ -268,4 +181,4 @@ git push -u origin main
 
 ## License
 
-This project is developed for academic assessment purposes.
+This project is developed by Clifford Onyango
